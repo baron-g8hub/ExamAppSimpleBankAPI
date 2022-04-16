@@ -11,7 +11,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
 // NOTE: Registration of customized Swagger UI and to be turned-of when production to free up resources.
@@ -41,13 +41,17 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthorization();
 
@@ -58,6 +62,11 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("../swagger/v1/swagger.json", "SimpleBankingApi");
 });
+
+//app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllers();
 
