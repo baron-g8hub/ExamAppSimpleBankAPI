@@ -1,0 +1,63 @@
+﻿@model TestSimpleBankWeb.TransferViewModel
+@using Utility
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h4>Transaction Details</h4>
+<hr />
+<div>
+    <h4>TransferViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Posting Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entity.PostingDate)
+        </dd>
+        <dt class="col-sm-2">
+            Referecence #.
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entity.Transaction_ID)
+        </dd>
+        <dt class="col-sm-2">
+            Account Number.
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entity.AccountNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Ammount
+        </dt>
+        <dd class="col-sm-10">
+            @Utility.HandleAmountString(Model.Entity.Amount.ToString())
+        </dd>
+        <dt class="col-sm-2">
+            Destination Account
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entity.DestinationAccount)
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Entity.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Running Balance
+        </dt>
+        <dd class="col-sm-10">
+            @Utility.HandleAmountString(Model.Entity.RunningBalance.ToString())
+        </dd>
+    </dl>
+</div>
+<hr />
+<div>
+    <a class="btn btn-secondary btn-sm" asp-controller="Transactions" asp-action="Index">
+        <i class="fas fa-circle-left"></i>
+        Back
+    </a>
+</div>

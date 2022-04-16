@@ -1,6 +1,8 @@
 ﻿using BusinessLogicLayer;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,20 +34,55 @@ namespace TestSimpleBankWeb.Controllers
 
         // GET api/<TransactionsAPIController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var list = await _transactionsManager.GetTransactionByIdAsync(id);
+            return Ok(JsonConvert.SerializeObject(list).ToString());
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Transfer([FromBody] Transaction model)
+        {
+            try
+            {
+                var mgr = new TransactionsManager(_configuration);
+                var result = await mgr.AddTransferTransactionAsync(model);
+                if (result == "ok")
+                {
+                    result = "Account transfered successfully.";
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
 
         // POST api/<TransactionsAPIController>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] string value)
         {
         }
 
         // PUT api/<TransactionsAPIController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody] string value)
         {
         }
 
