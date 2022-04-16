@@ -1,125 +1,83 @@
-﻿@model IEnumerable<Entities.Account>
-
+﻿@model TestSimpleBankWeb.AccountsViewModel
+@using Utility
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Accounts";
 }
 
-<h1>Index</h1>
+<h4>List of Accounts</h4>
+<hr />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<ul class="nav">
+    <li class="nav-item">
+        <a class="btn btn-outline-primary btn-sm" asp-controller="TestAccounts" asp-action="CreateAccount">
+            <i class="fas fa-circle-plus"></i>
+            Account
+        </a>
+    </li>
+    <li class="nav-item" style="padding-top: 0px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
+        <a class="btn btn-outline-primary btn-sm" asp-controller="TestAccounts" asp-action="Transfer">
+            <i class="fas fa-copy"></i>
+            Transfer
+        </a>
+    </li>
+</ul>
+<table class="table table-sm table-bordered">
     <thead>
         <tr>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.Account_ID)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.AccountName)
             </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.AccountType)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountNumber)
+            <th scope="col" style="text-align: center;">
+                Balance
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SavingsBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckingBalance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreditBalance)
-            </th>
-            <th>
+            <th scope="col">
                 @Html.DisplayNameFor(model => model.IsActive)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDateStr)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedDateStr)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountType_ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountTypeName)
+            <th scope="col">
+                @Html.DisplayNameFor(model => model.AccountType)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SavingsBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckingBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreditBalance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDateStr)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDateStr)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountType_ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountTypeName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.EntityList)
+        {
+            <tr>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.Account_ID)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.AccountName)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.AccountType)
+                </td>
+                <td scope="row" style="text-align: right;">
+                      @Utility.HandleAmountString(item.SavingsBalance.ToString())
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td scope="row">
+                    @Html.DisplayFor(modelItem => item.AccountTypeName)
+                </td>
+                <td scope="row">
+                    <form asp-route-id="@item.Account_ID" method="post">
+                        <a class="btn btn-sm btn-outline-primary" asp-controller="TestAccounts" asp-action="CreateAccount" asp-route-id="@item.Account_ID">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </form>
+                    @*  @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
