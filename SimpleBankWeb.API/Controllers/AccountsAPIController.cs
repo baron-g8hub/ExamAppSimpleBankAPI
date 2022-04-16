@@ -1,44 +1,106 @@
 ﻿using BusinessLogicLayer;
+using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace SimpleBankWeb.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
+    //[Route("[controller]")]
     public class AccountsAPIController : ControllerBase
     {
+        private AccountsManager _accountsManager;
 
-        private  IConfiguration _configuration;
+        private IConfiguration _configuration;
         public AccountsAPIController(IConfiguration configuration)
         {
             _configuration = configuration;
+            _accountsManager = new AccountsManager(_configuration);
         }
 
 
-
-        // GET: api/<AccountsAPIController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var datasource = new AccountsManager(_configuration);
-            var list = await datasource.GetAccounts();
+            var list = await _accountsManager.GetAccountsAsync();
             return Ok(JsonConvert.SerializeObject(list).ToString());
         }
 
 
-        // GET api/<AccountsAPIController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            try
+            {
+                if (id == 0)
+                {
+                    return NotFound("Item not found.");
+                }
+                var entity = await _accountsManager.GetAccountByIdAsync(id);
+                if (entity.Account_ID == 0)
+                {
+                    return NotFound("Item Not Found.");
+                }
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
         }
 
-        // POST api/<AccountsAPIController>
+
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Add([FromBody] Account entity)
         {
+            try
+            {
+                var result = await _accountsManager.AddAsync(entity);
+                if (result == "ok")
+                {
+                    result = entity.AccountName + " account created successfully.";
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, [FromBody] Account entity)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    return NotFound("Item not found.");
+                }
+
+                var result = await _accountsManager.UpdateAsync(entity);
+                if (result == "ok")
+                {
+                    result = entity.AccountName + " account created successfully.";
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
         }
 
         // PUT api/<AccountsAPIController>/5
