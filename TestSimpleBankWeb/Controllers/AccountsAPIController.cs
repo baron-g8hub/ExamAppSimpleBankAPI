@@ -11,7 +11,6 @@ namespace TestSimpleBankWeb.Controllers
     public class AccountsAPIController : ControllerBase
     {
         private AccountsManager _accountsManager;
-
         private IConfiguration _configuration;
         public AccountsAPIController(IConfiguration configuration)
         {
@@ -19,14 +18,12 @@ namespace TestSimpleBankWeb.Controllers
             _accountsManager = new AccountsManager(_configuration);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var list = await _accountsManager.GetAccountsAsync();
             return Ok(JsonConvert.SerializeObject(list).ToString());
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -50,8 +47,6 @@ namespace TestSimpleBankWeb.Controllers
             }
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Account entity)
         {
@@ -73,7 +68,6 @@ namespace TestSimpleBankWeb.Controllers
                 return this.StatusCode(400, ex.Message);
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Update(int id, [FromBody] Account entity)
@@ -101,14 +95,7 @@ namespace TestSimpleBankWeb.Controllers
                 return this.StatusCode(400, ex.Message);
             }
         }
-
-        // PUT api/<AccountsAPIController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AccountsAPIController>/5
+        
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

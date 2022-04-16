@@ -12,9 +12,7 @@ namespace TestSimpleBankWeb.Controllers
         {
             _configuration = configuration;
         }
-
-
-        // GET: TestAccountsController
+       
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -43,9 +41,7 @@ namespace TestSimpleBankWeb.Controllers
                 throw ex;
             }
         }
-
-
-        // GET: TestAccountsController/Details/5
+      
         public async Task<IActionResult> Details(int id)
         {
             var vm = new TransferViewModel();
@@ -71,7 +67,6 @@ namespace TestSimpleBankWeb.Controllers
             vm.Entity = entity;
             return View(vm);
         }
-
 
         public ActionResult Transfer()
         {
@@ -134,7 +129,6 @@ namespace TestSimpleBankWeb.Controllers
                 throw ex;
             }
         }
-
 
     }
 }

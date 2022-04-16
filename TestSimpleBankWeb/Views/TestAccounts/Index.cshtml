@@ -67,7 +67,7 @@
                 <td scope="row">
                     @Html.DisplayFor(modelItem => item.AccountTypeName)
                 </td>
-                <td scope="row">
+                <td scope="row" style="text-align: center;">
                     <form asp-route-id="@item.Account_ID" method="post">
                         <a class="btn btn-sm btn-outline-primary" asp-controller="TestAccounts" asp-action="CreateAccount" asp-route-id="@item.Account_ID">
                             <i class="fas fa-edit"></i>

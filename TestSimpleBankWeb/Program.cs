@@ -19,8 +19,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Simple Bank API",
-        Description = ".NetCore test app by: Baron",
+        Title = "Simple Bank .NetCore API by: BaronLugtu",
+        Description = "web ui and api test application.",
         //TermsOfService = new Uri("https://example.com/terms"),
         //Contact = new OpenApiContact
         //{
