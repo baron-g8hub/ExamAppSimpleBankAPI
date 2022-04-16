@@ -21,7 +21,7 @@ namespace TestSimpleBankWeb.Controllers
         {
             try
             {
-                var vm = new AccountsViewModel(_configuration);
+                var vm = new AccountsViewModel();
                 var list = new List<Account>();
                 using (var httpClient = new HttpClient())
                 {
@@ -49,7 +49,7 @@ namespace TestSimpleBankWeb.Controllers
         public async Task<ActionResult> CreateAccount()
         {
             var id = RouteData.Values["id"];
-            var vm = new AccountsViewModel(_configuration);
+            var vm = new AccountsViewModel();
             ViewBag.accountTypes = vm.LoadAccountTypes();
             if (id != null)
             {

@@ -9,11 +9,8 @@ namespace TestSimpleBankWeb
     {
         public AccountsManager _repo;
 
-        IConfiguration _configuration;
-        public AccountsViewModel(IConfiguration configuration)
+        public AccountsViewModel()
         {
-            _configuration = configuration;
-            _repo = new AccountsManager(_configuration);
             EntityList = new List<Account>();
             SelectListItems = LoadAccountTypes();
         }
@@ -31,12 +28,7 @@ namespace TestSimpleBankWeb
             };
             return types;
         }
-
-        public async Task<List<Account>> LoadAllAccounts()
-        {
-            return await _repo.GetAccountsAsync();
-        }
-
+       
         public int Account_ID { get; set; }
 
         [Required]

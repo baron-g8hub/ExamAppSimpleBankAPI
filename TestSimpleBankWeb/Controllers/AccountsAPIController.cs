@@ -8,7 +8,6 @@ namespace TestSimpleBankWeb.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    //[Route("[controller]")]
     public class AccountsAPIController : ControllerBase
     {
         private AccountsManager _accountsManager;
