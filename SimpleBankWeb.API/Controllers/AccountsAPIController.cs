@@ -1,83 +1,56 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BusinessLogicLayer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace SimpleBankWeb.API.Controllers
 {
-    public class AccountsAPIController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AccountsAPIController : ControllerBase
     {
-        // GET: AccountsAPIController
-        public ActionResult Index()
+
+        private  IConfiguration _configuration;
+        public AccountsAPIController(IConfiguration configuration)
         {
-            return View();
+            _configuration = configuration;
         }
 
-        // GET: AccountsAPIController/Details/5
-        public ActionResult Details(int id)
+
+
+        // GET: api/<AccountsAPIController>
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            return View();
+            var datasource = new AccountsManager(_configuration);
+            var list = await datasource.GetAccounts();
+            return Ok(JsonConvert.SerializeObject(list).ToString());
         }
 
-        // GET: AccountsAPIController/Create
-        public ActionResult Create()
+
+        // GET api/<AccountsAPIController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
         {
-            return View();
+            return "value";
         }
 
-        // POST: AccountsAPIController/Create
+        // POST api/<AccountsAPIController>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public void Post([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
-        // GET: AccountsAPIController/Edit/5
-        public ActionResult Edit(int id)
+        // PUT api/<AccountsAPIController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
         {
-            return View();
         }
 
-        // POST: AccountsAPIController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // DELETE api/<AccountsAPIController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AccountsAPIController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AccountsAPIController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
