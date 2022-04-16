@@ -3,22 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBankWeb.UI", "SimpleBankWeb.UI\SimpleBankWeb.UI.csproj", "{29B813AE-61FB-4E81-8385-1D5D46FF4946}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBankWeb.API", "SimpleBankWeb.API\SimpleBankWeb.API.csproj", "{13FF22B6-9424-4F2C-9AAF-2B350A641F3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBankWeb.API", "SimpleBankWeb.API\SimpleBankWeb.API.csproj", "{13FF22B6-9424-4F2C-9AAF-2B350A641F3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonLibrary", "CommonLibrary", "{C2632666-334A-4FE0-B692-08DCEA7D55D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{456B7BE0-307E-49B7-91D4-E6FF178B2339}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +24,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{29B813AE-61FB-4E81-8385-1D5D46FF4946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29B813AE-61FB-4E81-8385-1D5D46FF4946}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29B813AE-61FB-4E81-8385-1D5D46FF4946}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29B813AE-61FB-4E81-8385-1D5D46FF4946}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13FF22B6-9424-4F2C-9AAF-2B350A641F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13FF22B6-9424-4F2C-9AAF-2B350A641F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13FF22B6-9424-4F2C-9AAF-2B350A641F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
