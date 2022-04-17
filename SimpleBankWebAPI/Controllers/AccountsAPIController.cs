@@ -10,19 +10,23 @@ namespace SimpleBankWebAPI.Controllers
     [ApiController]
     public class AccountsAPIController : ControllerBase
     {
-        private AccountsManager _accountsManager;
-        private IConfiguration _configuration;
+        public AccountsManager? _accountsManager;
+        public IConfiguration _configuration;
+        // IAccountService _accountService;
+
+
         public AccountsAPIController(IConfiguration configuration)
         {
-            _configuration = configuration;
-            _accountsManager = new AccountsManager(_configuration);
+            this._configuration = configuration;
+            //_accountService = accountService;
+            _accountsManager = new AccountsManager(configuration);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<Account>>> Get()
         {
-            var list = await _accountsManager.GetAccountsAsync();
-            return Ok(JsonConvert.SerializeObject(list).ToString());
+            List<Account> list = await _accountsManager.GetAccountsAsync();
+            return Ok(list);
         }
 
         [HttpGet("{id}")]
@@ -95,7 +99,7 @@ namespace SimpleBankWebAPI.Controllers
                 return this.StatusCode(400, ex.Message);
             }
         }
-        
+
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

@@ -22,7 +22,9 @@ namespace BusinessLogicLayer
 
         public async Task<List<Account>> GetAccountsAsync()
         {
-            return await _dataSource.SelectAsync();
+            List<Account> list = new List<Account>();
+            list = await _dataSource.SelectAsync();
+            return list;
         }
 
         public async Task<Account> GetAccountByIdAsync(int id)

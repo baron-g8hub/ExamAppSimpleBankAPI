@@ -9,11 +9,11 @@ namespace SimpleBankWebAPI.Controllers
     public class AccountsController : Controller
     {
         IConfiguration _configuration;
-        public  AccountsController(IConfiguration configuration)
+        public AccountsController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-    
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -28,11 +28,13 @@ namespace SimpleBankWebAPI.Controllers
                     {
                         url = "https://" + HttpContext.Request.Host.Value;
                     }
-
                     using (var response = await httpClient.GetAsync(url + "/AccountsApi/Get"))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        vm.EntityList = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            vm.EntityList = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+                        }
                     }
                 }
                 return View(vm);
@@ -132,17 +134,17 @@ namespace SimpleBankWebAPI.Controllers
                 throw ex;
             }
         }
-        
+
         public ActionResult Details(int id)
         {
             return View();
         }
-      
+
         public ActionResult Edit(int id)
         {
             return View();
         }
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -156,12 +158,12 @@ namespace SimpleBankWebAPI.Controllers
                 return View();
             }
         }
-      
+
         public ActionResult Delete(int id)
         {
             return View();
         }
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
