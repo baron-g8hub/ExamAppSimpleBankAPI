@@ -29,7 +29,7 @@ namespace SimpleBankWebAPI.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Account>> Get(int id)
         {
             try
@@ -51,8 +51,9 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> Get(string name)
+
+        [HttpGet("{id}/{name}")]
+        public async Task<ActionResult<Account>> Get(int id, string name)
         {
             try
             {
@@ -126,10 +127,8 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
-
-
-        [HttpDelete("{number}")]
-        public async Task<IActionResult> DeleteByAccountNumber(string number)
+        [HttpDelete("{id}/{number}")]
+        public async Task<IActionResult> DeleteByAccountNumber(int id, string number)
         {
             try
             {
