@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SavingsBalance" class="control-label"></label>
-                <input asp-for="SavingsBalance" class="form-control" />
+                <input asp-for="SavingsBalance" placeholder="0.00" class="form-control" />
                 <span asp-validation-for="SavingsBalance" class="text-danger"></span>
             </div>
             @Html.HiddenFor(m => m.Account_ID)
