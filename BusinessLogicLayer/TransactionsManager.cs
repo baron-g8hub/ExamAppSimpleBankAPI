@@ -23,7 +23,9 @@ namespace BusinessLogicLayer
 
         public async Task<List<Transaction>> GetTransactionsAsync()
         {
-            return await _dataSource.SelectAsync();
+            List<Transaction> list = new List<Transaction>();
+            list = await _dataSource.SelectAsync();
+            return list;
         }
 
         public async Task<Transaction> GetTransactionByIdAsync(int id)

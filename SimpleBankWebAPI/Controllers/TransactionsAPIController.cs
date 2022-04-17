@@ -9,40 +9,61 @@ namespace SimpleBankWebAPI.Controllers
     [ApiController]
     public class TransactionsAPIController : ControllerBase
     {
-        private TransactionsManager _transactionsManager;
+        public TransactionsManager _transactionsManager;
 
-        private IConfiguration _configuration;
+        public IConfiguration _configuration;
         public TransactionsAPIController(IConfiguration configuration)
         {
             _configuration = configuration;
             _transactionsManager = new TransactionsManager(_configuration);
         }
-       
+
+
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<Transaction>>> Get()
         {
             var list = await _transactionsManager.GetTransactionsAsync();
-            return Ok(JsonConvert.SerializeObject(list).ToString());
-        }
-      
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            var list = await _transactionsManager.GetTransactionByIdAsync(id);
-            return Ok(JsonConvert.SerializeObject(list).ToString());
+            return Ok(list);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Transfer([FromBody] Transaction model)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Transaction>> Get(int id)
         {
             try
             {
+                if (id == 0)
+                {
+                    return NotFound();
+                }
+                var entity = await _transactionsManager.GetTransactionByIdAsync(id);
+                if (entity.Transaction_ID == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Transfer([FromBody] Transaction transaction)
+        {
+            try
+            {
+                if (!ModelState.IsValid || (transaction.AccountNumber == "" || transaction.AccountNumber == "string"))
+                {
+                    return BadRequest(ModelState);
+                }
                 var mgr = new TransactionsManager(_configuration);
-                var result = await mgr.AddTransferTransactionAsync(model);
+                var result = await mgr.AddTransferTransactionAsync(transaction);
                 if (result == "ok")
                 {
-                    result = "Account transfered successfully.";
-                    return Ok(result);
+                    return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
                 }
                 else
                 {
@@ -54,6 +75,6 @@ namespace SimpleBankWebAPI.Controllers
                 return this.StatusCode(400, ex.Message);
             }
         }
-      
+
     }
 }

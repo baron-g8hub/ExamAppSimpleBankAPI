@@ -17,7 +17,7 @@ namespace SimpleBankWebAPI.Tests
     {
         public IConfiguration? _configuration;
         AccountsAPIController _controller;
-
+        
         public AccountsAPIControllerTests()
         {
             IServiceCollection services = new ServiceCollection();
@@ -25,9 +25,8 @@ namespace SimpleBankWebAPI.Tests
             _controller = new AccountsAPIController(_configuration);
         }
 
-
         [Fact]
-        public async Task GetAccounts_Returns_Correct_Count()
+        public async Task Get_Accounts_Returns_Correct_Count()
         {
             // Arrange
             int count = 0;
@@ -45,11 +44,10 @@ namespace SimpleBankWebAPI.Tests
             Assert.Equal(count, returnAccounts?.Count());
         }
 
-
         [Theory]
         [InlineData(10000004, 0)]
         //[InlineData("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200", "ab2bd817-98cd-4cf3-a80a-53ea0cd9c111")]
-        public async Task GetAccountByIdTest(int guid1, int guid2)
+        public async Task Get_AccountById_Test(int guid1, int guid2)
         {
             //Arrange
             var validGuid = guid1;      // new Guid(guid1);
@@ -75,10 +73,8 @@ namespace SimpleBankWebAPI.Tests
             Assert.Equal("Ron Testaccount", value?.AccountName);
         }
 
-
-
         [Fact]
-        public async void AddBookTest()
+        public async void Add_Account_Test()
         {
             //Arrange
             var completeAccount = new Account()
@@ -129,28 +125,6 @@ namespace SimpleBankWebAPI.Tests
             //Assert
             Assert.IsType<BadRequestObjectResult>(badResponse);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public IConfiguration Configuration
         {
