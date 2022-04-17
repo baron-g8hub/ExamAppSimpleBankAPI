@@ -18,7 +18,6 @@ namespace SimpleBankWebAPI.Tests
         public IConfiguration? _configuration;
         AccountsAPIController _controller;
 
-
         public AccountsAPIControllerTests()
         {
             IServiceCollection services = new ServiceCollection();
@@ -74,6 +73,61 @@ namespace SimpleBankWebAPI.Tests
             var value = item?.Value as Account;
             Assert.Equal(validGuid, value?.Account_ID);
             Assert.Equal("Ron Testaccount", value?.AccountName);
+        }
+
+
+
+        [Fact]
+        public async void AddBookTest()
+        {
+            //Arrange
+            var completeAccount = new Account()
+            {
+                Account_ID = 0,
+                AccountNumber = "",
+                AccountName = "AccountName",
+                AccountType = 1,
+                AccountType_ID = 1,
+                UpdatedBy = "Admin",
+                CreatedBy = "Admin",
+                CreatedDateStr = "",
+                UpdatedDateStr = "",
+                AccountTypeName = "Savings",
+            };
+            var responseDelete = await _controller.DeleteByAccountName(completeAccount.AccountName);
+
+            //Act
+            var createdResponse = await _controller.Add(completeAccount);
+
+
+            //Assert
+            Assert.IsType<CreatedAtActionResult>(createdResponse);
+
+
+            //value of the result
+            var item = createdResponse as CreatedAtActionResult;
+            Assert.IsType<Account>(item.Value);
+
+            //check value of this account
+            var accountItem = item.Value as Account;
+            Assert.Equal(completeAccount.AccountName, accountItem.AccountName);
+            Assert.Equal(completeAccount.AccountType, accountItem.AccountType);
+            Assert.Equal(completeAccount.SavingsBalance, accountItem.SavingsBalance);
+
+
+            //Arrange
+            var incompleteAccount = new Account()
+            {
+                AccountName = "",
+                AccountType = 0
+            };
+
+            //Act
+            _controller.ModelState.AddModelError("AccountName", "Account name is requried.");
+            var badResponse = await _controller.Add(incompleteAccount);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(badResponse);
         }
 
 

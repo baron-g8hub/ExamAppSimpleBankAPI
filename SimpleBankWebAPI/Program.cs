@@ -1,3 +1,4 @@
+using Utility;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,9 +9,14 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 builder.Configuration.AddJsonFile($"appsettings.Dev.json", optional: true);
 builder.Configuration.AddEnvironmentVariables();
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
+
+// Add services to the container.
+//var provider = builder.Services.BuildServiceProvider();
+//var configuration = provider.GetRequiredService<IConfiguration>();
+//var defaultConnString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
 // NOTE: Registration of customized Swagger UI and to be turned-of when production to free up resources.

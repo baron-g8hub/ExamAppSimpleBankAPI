@@ -26,7 +26,7 @@ namespace SimpleBankWebAPI
             return newBook;
         }
 
-       
+
 
         Account IAccountService.GetById(Guid id)
         {

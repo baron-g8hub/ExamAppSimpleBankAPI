@@ -32,6 +32,11 @@ namespace BusinessLogicLayer
             return await _dataSource.SelectAsync(id);
         }
 
+        public async Task<Account> GetByAccountNameAsync(string  name)
+        {
+            return await _dataSource.SelectAsync(name);
+        }
+
         public async Task<string> AddAsync(Account entity)
         {
             if (entity.AccountNumber != "string" && entity.Account_ID != 0 && entity.AccountNumber != "")
@@ -57,6 +62,16 @@ namespace BusinessLogicLayer
             return message;
         }
 
+        public async Task<string> DeleteByAccountNumberAsync(string number)
+        {
+            string message = await _dataSource.DeleteByAccountNumberAsync(number);
+            return message;
+        }
 
+        public async Task<string> DeleteByAccountNameAsync(string name)
+        {
+            string message = await _dataSource.DeleteByAccountNameAsync(name);
+            return message;
+        }
     }
 }

@@ -139,6 +139,66 @@ namespace DataAccessLayer
             return entity;
         }
 
+        public async Task<Account> SelectAsync(string  name)
+        {
+            var entity = new Account();
+            const string strQuery = @"SELECT * FROM [dbo].[Accounts] WHERE AccountName = @AccountName";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using SqlCommand command = new SqlCommand(strQuery, conn);
+                command.Parameters.AddWithValue("@AccountName", name);
+                DataSet dataSet = new DataSet();
+                try
+                {
+                    await conn.OpenAsync();
+                    var dataAdapter = new SqlDataAdapter(command);
+                    dataAdapter.Fill(dataSet);
+                    dataAdapter.Dispose();
+                    await conn.CloseAsync();
+
+                    if (dataSet.Tables[0].Rows.Count > 0)
+                    {
+                        foreach (DataRow row in dataSet.Tables[0].Rows)
+                        {
+                            entity = new Account
+                            {
+                                Account_ID = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
+                                AccountName = string.IsNullOrEmpty(row["AccountName"].ToString()) ? string.Empty : row["AccountName"].ToString(),
+                                AccountType = string.IsNullOrEmpty(row["AccountType"].ToString()) ? 0 : int.Parse(row["AccountType"].ToString()),
+                                AccountNumber = string.IsNullOrEmpty(row["AccountNumber"].ToString()) ? string.Empty : row["AccountNumber"].ToString(),
+                                SavingsBalance = string.IsNullOrEmpty(row["SavingsBalance"].ToString()) ? 0.00 : double.Parse(row["SavingsBalance"].ToString()),
+                                CheckingBalance = string.IsNullOrEmpty(row["CheckingBalance"].ToString()) ? 0.00 : double.Parse(row["CheckingBalance"].ToString()),
+                                CreditBalance = string.IsNullOrEmpty(row["CreditBalance"].ToString()) ? 0.00 : double.Parse(row["CreditBalance"].ToString()),
+                                IsActive = !string.IsNullOrEmpty(row["IsActive"].ToString()) && bool.Parse(row["IsActive"].ToString()),
+                                CreatedBy = string.IsNullOrEmpty(row["CreatedBy"].ToString()) ? string.Empty : row["CreatedBy"].ToString().ToLower(),
+                                CreatedDate = (Convert.IsDBNull(row["CreatedDate"].ToString())) ? DateTime.Now : (row["CreatedDate"].ToString() == "") ? DateTime.Now : Convert.ToDateTime(row["CreatedDate"].ToString()),
+                                UpdatedDate = (Convert.IsDBNull(row["UpdatedDate"].ToString())) ? DateTime.Now : (row["UpdatedDate"].ToString() == "") ? DateTime.Now : Convert.ToDateTime(row["UpdatedDate"].ToString()),
+                                UpdatedBy = string.IsNullOrEmpty(row["UpdatedBy"].ToString()) ? string.Empty : row["UpdatedBy"].ToString().ToLower(),
+                            };
+                            if (entity.CreatedDate != null)
+                            {
+                                entity.CreatedDateStr = entity.CreatedDate.ToString("yyyy/MM/dd HH:mm:ss");
+                            }
+                            if (entity.UpdatedDate != null)
+                            {
+                                entity.UpdatedDateStr = entity.UpdatedDate.ToString("yyyy/MM/dd HH:mm:ss");
+                            }
+                        }
+                    }
+                    await command.DisposeAsync();
+                    dataSet.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    await command.DisposeAsync();
+                    dataSet.Dispose();
+                    throw ex;
+                }
+            }
+            return entity;
+        }
+
         public async Task<string> InsertAsync(Account entity)
         {
             var message = "ok";
@@ -248,6 +308,60 @@ namespace DataAccessLayer
                 //throw ex;
             }
             return message;
+        }
+
+        public async Task<string> DeleteByAccountNumberAsync(string number)
+        {
+            var message = "ok";
+            const string strQuery = @"DELETE [dbo].[Accounts] WHERE AccountNumber = @AccountNumber";
+            using SqlConnection conn = new SqlConnection(connectionString);
+            using SqlCommand command = new SqlCommand(strQuery, conn);
+            try
+            {
+                command.Parameters.AddWithValue("@AccountNumber", number.Trim());
+                await conn.OpenAsync();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    message = e.Message;
+                };
+                var result = await command.ExecuteNonQueryAsync();
+                await conn.CloseAsync();
+                await command.DisposeAsync();
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message.ToString();
+                //throw ex;
+            }
+            return message;
+        }
+
+        public async Task<string> DeleteByAccountNameAsync(string name)
+        {
+            var message = "ok";
+            const string strQuery = @"DELETE [dbo].[Accounts] WHERE AccountName = @AccountName";
+            using SqlConnection conn = new SqlConnection(connectionString);
+            using SqlCommand command = new SqlCommand(strQuery, conn);
+            try
+            {
+                command.Parameters.AddWithValue("@AccountName", name.Trim());
+
+                await conn.OpenAsync();
+                conn.InfoMessage += (object obj, SqlInfoMessageEventArgs e) =>
+                {
+                    message = e.Message;
+                };
+                var result = await command.ExecuteNonQueryAsync();
+                await conn.CloseAsync();
+                await command.DisposeAsync();
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message.ToString();
+                //throw ex;
+            }
+            return message;
+
         }
     }
 }

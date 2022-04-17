@@ -19,7 +19,7 @@ namespace SimpleBankWebAPI.Controllers
         {
             this._configuration = configuration;
             //_accountService = accountService;
-            _accountsManager = new AccountsManager(configuration);
+            _accountsManager = new AccountsManager(_configuration);
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace SimpleBankWebAPI.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{name}")]
         public async Task<ActionResult<Account>> Get(int id)
         {
             try
@@ -51,16 +51,42 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Account>> Get(string name)
+        {
+            try
+            {
+                if (name == "")
+                {
+                    return NotFound();
+                }
+                var entity = await _accountsManager.GetByAccountNameAsync(name);
+                if (entity.Account_ID == 0)
+                {
+                    return NotFound();
+                }
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Account entity)
         {
             try
             {
+                if (!ModelState.IsValid || (entity.AccountName == "" || entity.AccountName == "string"))
+                {
+                    return BadRequest(ModelState);
+                }
                 var result = await _accountsManager.AddAsync(entity);
                 if (result == "ok")
                 {
                     result = entity.AccountName + " account created successfully.";
-                    return Ok(result);
+                    return CreatedAtAction("Get", new { name = entity.AccountName }, entity);
                 }
                 else
                 {
@@ -100,9 +126,50 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+
+        [HttpDelete("{number}")]
+        public async Task<IActionResult> DeleteByAccountNumber(string number)
         {
+            try
+            {
+                var result = await _accountsManager.DeleteByAccountNumberAsync(number);
+                if (result == "ok")
+                {
+                    result = "Account deleted successfully.";
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+        }
+
+        [HttpDelete("{name}")]
+        public async Task<IActionResult> DeleteByAccountName(string name)
+        {
+            try
+            {
+                var result = await _accountsManager.DeleteByAccountNameAsync(name);
+                if (result == "ok")
+                {
+                    result = "Account deleted successfully.";
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
         }
     }
 }
