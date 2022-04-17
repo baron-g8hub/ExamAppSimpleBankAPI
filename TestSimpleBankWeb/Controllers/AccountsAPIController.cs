@@ -70,11 +70,11 @@ namespace TestSimpleBankWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, [FromBody] Account entity)
+        public async Task<IActionResult> Update([FromBody] Account entity)
         {
             try
             {
-                if (id == 0)
+                if (entity.Account_ID == 0)
                 {
                     return NotFound("Item not found.");
                 }
@@ -82,7 +82,7 @@ namespace TestSimpleBankWeb.Controllers
                 var result = await _accountsManager.UpdateAsync(entity);
                 if (result == "ok")
                 {
-                    result = entity.AccountName + " account created successfully.";
+                    result = entity.AccountName + " account updated successfully.";
                     return Ok(result);
                 }
                 else

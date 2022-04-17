@@ -7,6 +7,15 @@ namespace Entities
 {
     public class Transaction
     {
+        public Transaction()
+        {
+            Transaction_ID = 0;
+            TransactionType_ID = 1;
+            Description = "";
+            PostingDateStr = "";
+            TransactionTypeName = "";
+        }
+
 		public int Transaction_ID { get; set; }
         public int TransactionType_ID { get; set; }
         public string TransactionTypeName { get; set; }

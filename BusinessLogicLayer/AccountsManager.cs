@@ -11,32 +11,28 @@ namespace BusinessLogicLayer
 {
     public class AccountsManager
     {
-        private AccountsDataSource dataSource;
-
+        private AccountsDataSource _dataSource;
         public IConfiguration _configuration;
-
-        public AccountsDataSource DataSource { get => dataSource; set => dataSource = value; }
 
         public AccountsManager(IConfiguration configuration)
         {
             this._configuration = configuration;
+            _dataSource = new AccountsDataSource(_configuration);
         }
 
         public async Task<List<Account>> GetAccountsAsync()
         {
-            DataSource = new AccountsDataSource(_configuration);
-            return await DataSource.SelectAsync();
+            return await _dataSource.SelectAsync();
         }
 
         public async Task<Account> GetAccountByIdAsync(int id)
         {
-            DataSource = new AccountsDataSource(_configuration);
-            return await DataSource.SelectAsync(id);
+            return await _dataSource.SelectAsync(id);
         }
 
         public async Task<string> AddAsync(Account entity)
         {
-            if (entity.AccountNumber != "" || entity.Account_ID != 0)
+            if (entity.AccountNumber != "string" && entity.Account_ID != 0 && entity.AccountNumber != "")
             {
                 return await UpdateAsync(entity);
             }
@@ -46,7 +42,7 @@ namespace BusinessLogicLayer
                 entity.UpdatedDate = DateTime.UtcNow;
                 entity.CreatedBy = "Admin";
                 entity.UpdatedBy = "Admin";
-                string message = await DataSource.InsertAsync(entity);
+                string message = await _dataSource.InsertAsync(entity);
                 return message;
             }
         }
@@ -55,7 +51,7 @@ namespace BusinessLogicLayer
         {
             entity.UpdatedDate = DateTime.UtcNow;
             entity.UpdatedBy = "Admin";
-            string message = await DataSource.UpdateAsync(entity);
+            string message = await _dataSource.UpdateAsync(entity);
             return message;
         }
 

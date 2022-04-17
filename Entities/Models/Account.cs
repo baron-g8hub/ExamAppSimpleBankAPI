@@ -13,6 +13,12 @@ namespace Entities
 			AccountNumber = "";
 			AccountName = "";
 			AccountType = 1;
+			AccountType_ID = 1;
+			UpdatedBy = "Admin";
+			CreatedBy = "Admin";
+			CreatedDateStr = "";
+			UpdatedDateStr = "";
+			AccountTypeName = "Savings";
         }
 
 		public int Account_ID { get; set; }

@@ -62,6 +62,6 @@ app.UseSwaggerUI(c =>
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=TestAccounts}/{action=Index}/{id?}");
+    pattern: "{controller=Accounts}/{action=Index}/{id?}");
 
 app.Run();

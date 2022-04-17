@@ -6,10 +6,10 @@ using System.Net.Http.Headers;
 
 namespace TestSimpleBankWeb.Controllers
 {
-    public class TestAccountsController : Controller
+    public class AccountsController : Controller
     {
         IConfiguration _configuration;
-        public  TestAccountsController(IConfiguration configuration)
+        public  AccountsController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -83,7 +83,7 @@ namespace TestSimpleBankWeb.Controllers
                 entity.AccountName = model.AccountName.Trim();
                 entity.AccountType = model.AccountType;
                 entity.SavingsBalance = model.SavingsBalance;
-
+                entity.AccountType_ID = model.AccountType;
 
                 var response = string.Empty;
                 using (var httpClient = new HttpClient())
