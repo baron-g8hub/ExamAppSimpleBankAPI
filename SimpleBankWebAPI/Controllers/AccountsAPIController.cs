@@ -30,18 +30,18 @@ namespace SimpleBankWebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<ActionResult<Account>> Get(int id)
         {
             try
             {
                 if (id == 0)
                 {
-                    return NotFound("Item not found.");
+                    return NotFound();
                 }
                 var entity = await _accountsManager.GetAccountByIdAsync(id);
                 if (entity.Account_ID == 0)
                 {
-                    return NotFound("Item Not Found.");
+                    return NotFound();
                 }
                 return Ok(entity);
             }
