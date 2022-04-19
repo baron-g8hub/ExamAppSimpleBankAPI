@@ -67,7 +67,7 @@
                     @Html.DisplayNameFor(model => model.AccountName)
                 </th>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.AccountType)
+                    Account #.
                 </th>
                 <th scope="col" style="text-align: center;">
                     Balance
@@ -86,13 +86,13 @@
             {
                 <tr>
                     <td scope="row">
-                        @Html.DisplayFor(modelItem => item.Account_ID)
+                        @Html.DisplayFor(modelItem => item.AccountId)
                     </td>
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.AccountName)
                     </td>
                     <td scope="row">
-                        @Html.DisplayFor(modelItem => item.AccountType)
+                        @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row" style="text-align: right;">
                         @Utility.HandleAmountString(item.SavingsBalance.ToString())
@@ -104,8 +104,8 @@
                         @Html.DisplayFor(modelItem => item.AccountTypeName)
                     </td>
                     <td scope="row" style="text-align: center;">
-                        <form asp-route-id="@item.Account_ID" method="post">
-                            <a class="btn btn-sm btn-outline-primary" asp-controller="Accounts" asp-action="CreateAccount" asp-route-id="@item.Account_ID">
+                        <form asp-route-id="@item.AccountId" method="post">
+                            <a class="btn btn-sm btn-outline-primary" asp-controller="Accounts" asp-action="CreateAccount" asp-route-id="@item.AccountId">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </form>

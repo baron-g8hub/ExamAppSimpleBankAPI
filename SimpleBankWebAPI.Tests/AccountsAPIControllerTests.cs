@@ -1,9 +1,10 @@
-using Entities;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleBankWebAPI.Controllers;
+using SimpleBankWebAPI.EFCoreDataAccess;
+using SimpleBankWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,12 +18,13 @@ namespace SimpleBankWebAPI.Tests
     {
         public IConfiguration? _configuration;
         AccountsAPIController _controller;
-        
+        private readonly IAccountsServiceRepository _repository;
+
         public AccountsAPIControllerTests()
         {
             IServiceCollection services = new ServiceCollection();
             services.AddSingleton<IConfiguration>(Configuration);
-            _controller = new AccountsAPIController(_configuration);
+            _controller = new AccountsAPIController(_configuration, _repository);
         }
 
         [Fact]
@@ -69,7 +71,7 @@ namespace SimpleBankWebAPI.Tests
 
             //Now, let us check the value itself.
             var value = item?.Value as Account;
-            Assert.Equal(validGuid, value?.Account_ID);
+            Assert.Equal(validGuid, value?.AccountId);
             Assert.Equal("Ron Testaccount", value?.AccountName);
         }
 
@@ -79,18 +81,14 @@ namespace SimpleBankWebAPI.Tests
             //Arrange
             var completeAccount = new Account()
             {
-                Account_ID = 0,
+                AccountId = 0,
                 AccountNumber = "",
                 AccountName = "AccountName",
                 AccountType = 1,
-                AccountType_ID = 1,
                 UpdatedBy = "Admin",
                 CreatedBy = "Admin",
-                CreatedDateStr = "",
-                UpdatedDateStr = "",
-                AccountTypeName = "Savings",
             };
-            var responseDelete = await _controller.DeleteByAccountName(completeAccount.AccountName);
+            var responseDelete = _controller.DeleteByAccountName(completeAccount.AccountName);
 
             //Act
             var createdResponse = await _controller.Add(completeAccount);

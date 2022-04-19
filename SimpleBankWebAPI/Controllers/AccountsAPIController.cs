@@ -1,8 +1,10 @@
 ﻿using BusinessLogicLayer;
-using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using SimpleBankWebAPI.EFCoreDataAccess;
+using SimpleBankWebAPI.Models;
 
 namespace SimpleBankWebAPI.Controllers
 {
@@ -10,27 +12,27 @@ namespace SimpleBankWebAPI.Controllers
     [ApiController]
     public class AccountsAPIController : ControllerBase
     {
-        public AccountsManager? _accountsManager;
         public IConfiguration _configuration;
-        // IAccountService _accountService;
+        private readonly IAccountsServiceRepository _repository;
 
-
-        public AccountsAPIController(IConfiguration configuration)
+        // Define the cancellation token.
+        CancellationTokenSource _cts = null;
+        public AccountsAPIController(IConfiguration configuration, IAccountsServiceRepository accountsServiceRepository)
         {
             this._configuration = configuration;
-            //_accountService = accountService;
-            _accountsManager = new AccountsManager(_configuration);
+            this._repository = accountsServiceRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Account>>> Get()
         {
-            List<Account> list = await _accountsManager.GetAccountsAsync();
+            // List<Account> list = await _accountsManager.GetAccountsAsync();
+            var list = await _repository.GetAllAsync();
             return Ok(list);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> Get(int id)
+        public async Task<ActionResult<Account>> Get(int? id)
         {
             try
             {
@@ -38,12 +40,16 @@ namespace SimpleBankWebAPI.Controllers
                 {
                     return NotFound();
                 }
-                var entity = await _accountsManager.GetAccountByIdAsync(id);
-                if (entity.Account_ID == 0)
+                var entity = await _repository.GetByAccountIdAsync(id);
+                if (AccountExists(entity.AccountId))
+                {
+                    return Ok(entity);
+                }
+                else
                 {
                     return NotFound();
                 }
-                return Ok(entity);
+
             }
             catch (Exception ex)
             {
@@ -61,8 +67,8 @@ namespace SimpleBankWebAPI.Controllers
                 {
                     return NotFound();
                 }
-                var entity = await _accountsManager.GetByAccountNameAsync(name);
-                if (entity.Account_ID == 0)
+                var entity = await _repository.GetByAccountNameAsync(name);
+                if (entity.AccountId == 0)
                 {
                     return NotFound();
                 }
@@ -77,14 +83,40 @@ namespace SimpleBankWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Account entity)
         {
+            _cts = new CancellationTokenSource();
+            // send a cancel after 4000 ms or call cts.Cancel();
+            // _cts.CancelAfter(4000);
+            CancellationToken ct = _cts.Token;
             try
             {
+                var result = "";
                 if (!ModelState.IsValid || (entity.AccountName == "" || entity.AccountName == "string"))
                 {
                     return BadRequest(ModelState);
                 }
-                var result = await _accountsManager.AddAsync(entity);
-                if (result == "ok")
+                entity.CreatedDate = DateTime.UtcNow;
+                entity.UpdatedDate = DateTime.UtcNow;
+                entity.CreatedBy = "Admin";
+                entity.UpdatedBy = "Admin";
+                entity.AccountType = 1;
+                if (AccountExists(entity.AccountId))
+                {
+                    _repository.Update(entity);
+                }
+                else
+                {
+                    await _repository.AddAsync(entity);
+                }
+
+                int ret = await _repository.SaveAsync(ct);
+                if (ret == 1)
+                {
+                    entity.AccountNumber = entity.AccountId.ToString();
+                    _repository.Update(entity);
+                    await _repository.SaveAsync(ct);
+                }
+
+                if (AccountNameExists(entity.AccountName))
                 {
                     result = entity.AccountName + " account created successfully.";
                     return CreatedAtAction("Get", new { name = entity.AccountName }, entity);
@@ -103,23 +135,35 @@ namespace SimpleBankWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] Account entity)
         {
+            _cts = new CancellationTokenSource();
+            // send a cancel after 4000 ms or call cts.Cancel();
+            _cts.CancelAfter(4000);
+            //Fetch the Token
+            CancellationToken ct = _cts.Token;
+
             try
             {
-                if (entity.Account_ID == 0)
+                if (entity.AccountId == 0 || !AccountExists(entity.AccountId))
                 {
-                    return NotFound("Item not found.");
+                    return NotFound();
                 }
-
-                var result = await _accountsManager.UpdateAsync(entity);
-                if (result == "ok")
+                try
                 {
-                    result = entity.AccountName + " account updated successfully.";
-                    return Ok(result);
+                    entity.UpdatedDate = DateTime.UtcNow;
+                    entity.UpdatedBy = "Admin";
+                    _repository.Update(entity);
+                    await _repository.SaveAsync(ct);
                 }
-                else
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    return BadRequest(result);
+                    ModelState.AddModelError(string.Empty, "Unable to save changes. The Book details was updated by another user, Please reload to get the latest record!");
+                    return BadRequest();
                 }
+                finally
+                {
+                    _cts.Dispose();
+                }
+                return Ok("Account updated successfully.");
             }
             catch (Exception ex)
             {
@@ -132,10 +176,16 @@ namespace SimpleBankWebAPI.Controllers
         {
             try
             {
-                var result = await _accountsManager.DeleteByAccountNumberAsync(number);
-                if (result == "ok")
+                _cts = new CancellationTokenSource();
+                // send a cancel after 4000 ms or call cts.Cancel();
+                _cts.CancelAfter(4000);
+                CancellationToken ct = _cts.Token;
+                var entity = await _repository.GetByAccountNumberAsync(number);
+                _repository.Delete(entity.AccountId);
+                await _repository.SaveAsync(ct);
+                var result = "Account deleted successfully.";
+                if (!AccountNumberExists(number))
                 {
-                    result = "Account deleted successfully.";
                     return Ok(result);
                 }
                 else
@@ -154,10 +204,17 @@ namespace SimpleBankWebAPI.Controllers
         {
             try
             {
-                var result = await _accountsManager.DeleteByAccountNameAsync(name);
-                if (result == "ok")
+                _cts = new CancellationTokenSource();
+                // send a cancel after 4000 ms or call cts.Cancel();
+                _cts.CancelAfter(4000);
+                CancellationToken ct = _cts.Token;
+
+                var entity = await _repository.GetByAccountNameAsync(name);
+                _repository.Delete(entity.AccountId);
+                await _repository.SaveAsync(ct);
+                var result = "Account deleted successfully.";
+                if (!AccountNameExists(name))
                 {
-                    result = "Account deleted successfully.";
                     return Ok(result);
                 }
                 else
@@ -169,6 +226,19 @@ namespace SimpleBankWebAPI.Controllers
             {
                 return this.StatusCode(400, ex.Message);
             }
+        }
+
+        private bool AccountExists(int id)
+        {
+            return _repository.GetAll().Any(e => e.AccountId == id);
+        }
+        private bool AccountNameExists(string name)
+        {
+            return _repository.GetAll().Any(e => e.AccountName == name);
+        }
+        private bool AccountNumberExists(string number)
+        {
+            return _repository.GetAll().Any(e => e.AccountNumber == number);
         }
     }
 }
