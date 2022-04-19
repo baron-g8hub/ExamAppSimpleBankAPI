@@ -9,8 +9,8 @@ namespace Entities
     {
         public Account()
         {
-            Account_ID = 0;
-            AccountId = 0;
+            
+            
             AccountName = "";
             AccountType = 1;
             AccountType_ID = 1;
@@ -21,8 +21,8 @@ namespace Entities
             AccountTypeName = "Savings";
         }
 
-        public int Account_ID { get; set; }
         public int AccountId { get; set; }
+   
         public string AccountName { get; set; }
         public int AccountType { get; set; }
         public string AccountNumber { get; set; }
@@ -36,7 +36,7 @@ namespace Entities
         public DateTime UpdatedDate { get; set; }
         public string UpdatedDateStr { get; set; }
         public string UpdatedBy { get; set; }
-
+        public byte[]? RowVersion { get; set; }
 
     }
 }

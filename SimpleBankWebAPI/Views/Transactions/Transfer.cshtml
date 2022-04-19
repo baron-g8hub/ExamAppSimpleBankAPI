@@ -26,6 +26,7 @@
                 <label asp-for="DestinationAccount" class="control-label"></label>
                 <input asp-for="DestinationAccount" class="form-control" />
                 <span asp-validation-for="DestinationAccount" class="text-danger"></span>
+                <input type="hidden" asp-for="RowVersion" />
             </div>
             <hr />
             <ul class="nav">

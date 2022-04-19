@@ -64,7 +64,7 @@ namespace SimpleBankWebAPI.Controllers
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         entity = JsonConvert.DeserializeObject<Account>(apiResponse);
-                        vm.Account_ID = entity.Account_ID;
+                        vm.AccountId = entity.AccountId;
                         vm.AccountName = entity.AccountName;
                         vm.AccountType = entity.AccountType;
                         vm.SavingsBalance = entity.SavingsBalance;
@@ -95,10 +95,10 @@ namespace SimpleBankWebAPI.Controllers
                     {
                         url = "https://" + HttpContext.Request.Host.Value;
                     }
-                    if (model.Account_ID != 0 || entity.Account_ID != 0)
+                    if (model.AccountId != 0 || entity.AccountId != 0)
                     {
-                        entity.Account_ID = model.Account_ID;
-                        entity.AccountNumber = model.Account_ID.ToString();
+                        entity.AccountId = model.AccountId;
+                        entity.AccountNumber = model.AccountId.ToString();
                         url += "/AccountsApi/Update";
                     }
                     else

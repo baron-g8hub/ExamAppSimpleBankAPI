@@ -29,7 +29,8 @@ namespace SimpleBankWebAPI
             return types;
         }
        
-        public int Account_ID { get; set; }
+        public int AccountId { get; set; }
+        
 
         [Required]
         [Display(Name = "Account Name")]
@@ -45,5 +46,8 @@ namespace SimpleBankWebAPI
         public double SavingsBalance { get; set; }
 
         public bool IsActive { get; set; }
+
+        public byte[]? RowVersion { get; set; }
+
     }
 }

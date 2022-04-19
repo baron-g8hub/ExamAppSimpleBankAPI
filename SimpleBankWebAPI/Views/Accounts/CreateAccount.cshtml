@@ -24,8 +24,9 @@
                 <label asp-for="SavingsBalance" class="control-label"></label>
                 <input asp-for="SavingsBalance" placeholder="0.00" class="form-control" />
                 <span asp-validation-for="SavingsBalance" class="text-danger"></span>
+                    <input type="hidden" asp-for="RowVersion" />
             </div>
-            @Html.HiddenFor(m => m.Account_ID)
+       
             <hr />
             <ul class="nav">
                 <li class="nav-item">

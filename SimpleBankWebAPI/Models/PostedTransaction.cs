@@ -10,7 +10,6 @@ namespace SimpleBankWebAPI.Models
     {
 
         [Key]
-        [StringLength(150)]
         [Column("Transaction_ID")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionId { get; set; }
@@ -29,5 +28,8 @@ namespace SimpleBankWebAPI.Models
         public string? RunningBalance { get; set; }
         [Column("TransactionType_ID")]
         public int? TransactionTypeId { get; set; }
+
+        [Timestamp]
+        public byte[]? RowVersion { get; set; }
     }
 }

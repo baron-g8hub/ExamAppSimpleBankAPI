@@ -27,5 +27,7 @@ namespace SimpleBankWebAPI
         [Required]
         [Display(Name = "Destination Account")]
         public string DestinationAccount { get; set; }
+
+        public byte[]? RowVersion { get; set; }
     }
 }

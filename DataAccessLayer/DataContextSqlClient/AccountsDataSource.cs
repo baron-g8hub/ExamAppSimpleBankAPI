@@ -42,7 +42,7 @@ namespace DataAccessLayer
                         {
                             var entity = new Account
                             {
-                                Account_ID = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
+                                AccountId = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
                                 AccountName = string.IsNullOrEmpty(row["AccountName"].ToString()) ? string.Empty : row["AccountName"].ToString(),
                                 AccountType = string.IsNullOrEmpty(row["AccountType"].ToString()) ? 0 : int.Parse(row["AccountType"].ToString()),
                                 AccountNumber = string.IsNullOrEmpty(row["AccountNumber"].ToString()) ? string.Empty : row["AccountNumber"].ToString(),
@@ -103,7 +103,7 @@ namespace DataAccessLayer
                         {
                             entity = new Account
                             {
-                                Account_ID = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
+                                AccountId = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
                                 AccountName = string.IsNullOrEmpty(row["AccountName"].ToString()) ? string.Empty : row["AccountName"].ToString(),
                                 AccountType = string.IsNullOrEmpty(row["AccountType"].ToString()) ? 0 : int.Parse(row["AccountType"].ToString()),
                                 AccountNumber = string.IsNullOrEmpty(row["AccountNumber"].ToString()) ? string.Empty : row["AccountNumber"].ToString(),
@@ -163,7 +163,7 @@ namespace DataAccessLayer
                         {
                             entity = new Account
                             {
-                                Account_ID = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
+                                AccountId = string.IsNullOrEmpty(row["Account_ID"].ToString()) ? 0 : int.Parse(row["Account_ID"].ToString()),
                                 AccountName = string.IsNullOrEmpty(row["AccountName"].ToString()) ? string.Empty : row["AccountName"].ToString(),
                                 AccountType = string.IsNullOrEmpty(row["AccountType"].ToString()) ? 0 : int.Parse(row["AccountType"].ToString()),
                                 AccountNumber = string.IsNullOrEmpty(row["AccountNumber"].ToString()) ? string.Empty : row["AccountNumber"].ToString(),
@@ -241,7 +241,7 @@ namespace DataAccessLayer
             {
                 //command.Parameters.AddWithValue("@XXXXXXXX", entity.XXXXXXXXX);
 
-                command.Parameters.AddWithValue("@Account_ID", entity.Account_ID);
+                command.Parameters.AddWithValue("@Account_ID", entity.AccountId);
                 command.Parameters.AddWithValue("@AccountName", entity.AccountName);
                 command.Parameters.AddWithValue("@AccountType", entity.AccountType);
                 //command.Parameters.AddWithValue("@AccountNumber", entity.AccountNumber);

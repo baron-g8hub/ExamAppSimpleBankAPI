@@ -39,7 +39,7 @@ namespace BusinessLogicLayer
 
         public async Task<string> AddAsync(Account entity)
         {
-            if (entity.AccountNumber != "string" && entity.Account_ID != 0 && entity.AccountNumber != "")
+            if (entity.AccountNumber != "string" && entity.AccountId != 0 && entity.AccountNumber != "")
             {
                 return await UpdateAsync(entity);
             }

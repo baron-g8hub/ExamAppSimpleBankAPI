@@ -10,13 +10,14 @@ namespace Entities
         public Transaction()
         {
             Transaction_ID = 0;
+            TransactionId = 0;
             TransactionType_ID = 1;
             Description = "";
             PostingDateStr = "";
             TransactionTypeName = "";
         }
-
-		public int Transaction_ID { get; set; }
+        public int Transaction_ID { get; set; }
+        public int TransactionId { get; set; }
         public int TransactionType_ID { get; set; }
         public string TransactionTypeName { get; set; }
         public DateTime PostingDate { get; set; }
@@ -27,5 +28,6 @@ namespace Entities
 		public double Amount { get; set; }
 		public string DestinationAccount { get; set; }
 		public double RunningBalance { get; set; }
-	}
+        public byte[]? RowVersion { get; set; }
+    }
 }

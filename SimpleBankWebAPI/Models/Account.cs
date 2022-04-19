@@ -35,5 +35,8 @@ namespace SimpleBankWebAPI.Models
         [StringLength(100)]
         [Unicode(false)]
         public string? UpdatedBy { get; set; }
+
+        [Timestamp]
+        public byte[]? RowVersion { get; set; }
     }
 }

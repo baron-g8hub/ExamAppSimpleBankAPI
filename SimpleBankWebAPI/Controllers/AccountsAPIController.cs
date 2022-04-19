@@ -99,7 +99,7 @@ namespace SimpleBankWebAPI.Controllers
                 entity.CreatedBy = "Admin";
                 entity.UpdatedBy = "Admin";
                 entity.AccountType = 1;
-                if (AccountExists(entity.AccountId))
+                if (AccountNumberExists(entity.AccountNumber))
                 {
                     _repository.Accounts.Update(entity);
                 }
