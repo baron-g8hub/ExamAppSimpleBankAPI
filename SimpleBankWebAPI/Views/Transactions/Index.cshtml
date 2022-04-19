@@ -49,7 +49,8 @@
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @Utility.HandleAmountString(item.Amount.ToString())
+                        @*@Utility.HandleAmountString(item.Amount.ToString())*@
+                        @Utility.HandleAmountFormat(item.Amount)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DestinationAccount)
@@ -58,7 +59,8 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @Utility.HandleAmountString(item.RunningBalance.ToString())
+                        @*@Utility.HandleAmountString(item.RunningBalance.ToString())*@
+                        @Utility.HandleAmountFormat(item.RunningBalance)
                     </td>
                     <td scope="row" style="text-align: center;">
                         <form asp-route-id="@item.Transaction_ID" method="post">

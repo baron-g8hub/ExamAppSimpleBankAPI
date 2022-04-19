@@ -8,7 +8,11 @@ namespace SimpleBankWebAPI.Models
     [Table("Posted_Transactions")]
     public  class PostedTransaction
     {
+
+        [Key]
+        [StringLength(150)]
         [Column("Transaction_ID")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? PostingDate { get; set; }

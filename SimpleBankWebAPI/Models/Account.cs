@@ -17,7 +17,8 @@ namespace SimpleBankWebAPI.Models
         public string AccountName { get; set; } = null!;
         public int? AccountType { get; set; }
         public string? AccountNumber { get; set; }
-        [Column(TypeName = "money")]
+        //[Column(TypeName = "money")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? SavingsBalance { get; set; }
         [Column(TypeName = "money")]
         public decimal? CheckingBalance { get; set; }

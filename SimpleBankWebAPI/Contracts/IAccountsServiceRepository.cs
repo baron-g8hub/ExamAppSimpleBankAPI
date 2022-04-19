@@ -1,12 +1,11 @@
 ﻿using SimpleBankWebAPI.Models;
 
-namespace SimpleBankWebAPI.EFCoreDataAccess
+namespace SimpleBankWebAPI.Contracts
 {
-    public interface IAccountsServiceRepository
+    public interface IAccountsServiceRepository : IRepositoryBase<Account>
     {
-
-        IEnumerable<Account> GetAll();
         IQueryable<Account> SelectAll();
+        IEnumerable<Account> GetAll();
         Task<ICollection<Account>> GetAllAsync();
         Account GetById(int Id);
         Task<Account> GetByIdAsync(int? Id);
@@ -19,5 +18,9 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
         void Delete(int Id);
         void Save();
         Task<int> SaveAsync(CancellationToken cancellationtoken);
+
+        void TakeMoneyFromAccount(Account entity, decimal? deduction);
+        void SendMoneyToAccount(Account entity, decimal? amount);
+
     }
 }

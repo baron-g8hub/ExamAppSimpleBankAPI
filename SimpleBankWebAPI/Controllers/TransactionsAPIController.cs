@@ -2,6 +2,9 @@
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SimpleBankWebAPI.Contracts;
+using SimpleBankWebAPI.Models;
+using Account = SimpleBankWebAPI.Models.Account;
 
 namespace SimpleBankWebAPI.Controllers
 {
@@ -9,26 +12,32 @@ namespace SimpleBankWebAPI.Controllers
     [ApiController]
     public class TransactionsAPIController : ControllerBase
     {
-        public TransactionsManager _transactionsManager;
-
         public IConfiguration _configuration;
-        public TransactionsAPIController(IConfiguration configuration)
+        //private readonly IAccountsServiceRepository _repoAccounts;
+        //private readonly IPostedTransactionsRepository _repoPostedTransactions;
+        private IRepositoryWrapper _repository;
+        // public TransactionService _service;
+
+        // Define the cancellation token.
+        CancellationTokenSource _cts = null;
+        public TransactionsAPIController(IConfiguration configuration, IRepositoryWrapper repository)
         {
             _configuration = configuration;
-            _transactionsManager = new TransactionsManager(_configuration);
+            _repository = repository;
+            //_service = new TransactionService(context, repository);
         }
 
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Transaction>>> Get()
         {
-            var list = await _transactionsManager.GetTransactionsAsync();
+            var list = await _repository.PostedTransactions.GetAllAsync();
             return Ok(list);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> Get(int id)
+        public async Task<ActionResult<Transaction>> Get(int? id)
         {
             try
             {
@@ -36,12 +45,16 @@ namespace SimpleBankWebAPI.Controllers
                 {
                     return NotFound();
                 }
-                var entity = await _transactionsManager.GetTransactionByIdAsync(id);
-                if (entity.Transaction_ID == 0)
+                var entity = await _repository.PostedTransactions.GetByIdAsync(id);
+                if (IsExists(entity.TransactionId))
+                {
+                    return Ok(entity);
+                }
+                else
                 {
                     return NotFound();
                 }
-                return Ok(entity);
+
             }
             catch (Exception ex)
             {
@@ -76,5 +89,70 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateTransaction([FromBody] Transaction transaction)
+        {
+            try
+            {
+                _cts = new CancellationTokenSource();
+                // send a cancel after 4000 ms or call cts.Cancel();
+                //_cts.CancelAfter(4000);
+                CancellationToken ct = _cts.Token;
+                if (ModelState.IsValid)
+                {
+
+                    //NOTED: take - 50 from Account
+                    var sourceAccount = new Account();
+                    sourceAccount.AccountNumber = transaction.AccountNumber;
+
+                    //NOTED: put + 50 to Account
+                    var recepientAccount = new Account();
+                    recepientAccount.AccountNumber = transaction.DestinationAccount;
+
+                    var wrapper = new PostingTransactionWrapper();
+                    wrapper.SourceAccount = sourceAccount;
+                    wrapper.DestinationAccount = recepientAccount;
+
+                    // _repository.Accounts.take
+
+
+
+
+
+
+
+                    //    _repository.Accounts.Update(entity);
+                    //   await _repository.PostedTransactions.SaveAsync(ct);
+
+
+
+                    //   await _repository.PostedTransactions.AddAsync(postTransaction);
+
+
+
+
+                    await _repository.PostedTransactions.SaveAsync(ct);
+                    return CreatedAtAction("Get", new { id = transaction.Transaction_ID }, transaction);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(400, ex.Message);
+            }
+            finally
+            {
+
+            }
+            return CreatedAtAction("Get", new { id = transaction.Transaction_ID }, transaction);
+        }
+
+
+
+
+        private bool IsExists(int id)
+        {
+            return _repository.PostedTransactions.GetAll().Any(e => e.TransactionId == id);
+        }
     }
 }

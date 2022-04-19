@@ -1,7 +1,9 @@
 using Utility;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using SimpleBankWebAPI.EFCoreDataAccess;
+using SimpleBankWebAPI.Contracts;
+using SimpleBankWebAPI.Repository;
+using SimpleBankWebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 //builder.Services.AddDbContext<BankingContext>(options => options.UseSqlServer("name=ConnectionStrings:BankingContext"));
 
-builder.Services.AddDbContext<BankingContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString));
 
 // NOTE: Should add here the environment variable to be used in CI/CD
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -23,12 +25,17 @@ builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 
+builder.Services.AddTransient<IRepositoryWrapper, RepositoryWrapper>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
 
-builder.Services.AddTransient<IAccountsServiceRepository, AccountsServiceRepository>();
+//builder.Services.AddTransient<IAccountsServiceRepository, AccountsServiceRepository>();
+//builder.Services.AddTransient<IPostedTransactionsRepository, PostedTransactionsRepository>();
+
+
+
 
 // NOTE: Registration of customized Swagger UI and to be turned-of when production to free up resources.
 builder.Services.AddSwaggerGen(options =>

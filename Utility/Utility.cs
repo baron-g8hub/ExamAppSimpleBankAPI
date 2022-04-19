@@ -15,7 +15,15 @@ namespace Utility
             string amountStr = string.Format("{0:F2}", result);
             //amountStr = string.Format("{0:C2}", 5.9d); //results in $5.90
             //amountStr = string.Format("{0:C2}", 5.123d); //results in $5.12
+
             return amountStr;
+        }
+
+
+        public static string HandleAmountFormat(double amount)
+        {
+            string ret = amount.ToString("N2");
+            return ret;
         }
 
 

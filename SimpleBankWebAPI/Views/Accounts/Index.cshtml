@@ -61,7 +61,7 @@
         <thead class="table-light">
             <tr>
                 <th scope="col">
-                    @Html.DisplayNameFor(model => model.Account_ID)
+                 Account ID
                 </th>
                 <th scope="col">
                     @Html.DisplayNameFor(model => model.AccountName)
@@ -86,7 +86,7 @@
             {
                 <tr>
                     <td scope="row">
-                        @Html.DisplayFor(modelItem => item.AccountId)
+                        @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.AccountName)
@@ -95,7 +95,7 @@
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @Utility.HandleAmountString(item.SavingsBalance.ToString())
+                        @Utility.HandleAmountFormat(item.SavingsBalance)
                     </td>
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.IsActive)

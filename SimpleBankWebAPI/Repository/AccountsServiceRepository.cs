@@ -2,32 +2,31 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
+using SimpleBankWebAPI.Contracts;
 using SimpleBankWebAPI.Models;
 
-namespace SimpleBankWebAPI.EFCoreDataAccess
+namespace SimpleBankWebAPI.Repository
 {
-    public class AccountsServiceRepository : IAccountsServiceRepository
+    public class AccountsServiceRepository : RepositoryBase<Account>, IAccountsServiceRepository
     {
-        private readonly BankingContext _context;
-        public AccountsServiceRepository(BankingContext context)
+        public AccountsServiceRepository(RepositoryContext context) : base(context)
         {
-            _context = context;
         }
 
         public IQueryable<Account> SelectAll()
         {
-            return _context.Set<Account>();
+            return RepositoryContext.Set<Account>();
         }
         public IEnumerable<Account> GetAll()
         {
-            return _context.Accounts.ToList();
+            return RepositoryContext.Accounts.ToList();
         }
-        public async Task<ICollection<Account>> GetAllAsync()
+        public virtual async Task<ICollection<Account>> GetAllAsync()
         {
             try
             {
-                //var list = await _context.Accounts.ToListAsync();
-                return await _context.Set<Account>().ToListAsync();
+                //var list = await RepositoryContext.Accounts.ToListAsync();
+                return await RepositoryContext.Set<Account>().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -36,28 +35,28 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
         }
         public virtual Account GetById(int Id)
         {
-            return _context.Accounts.Find(Id);
+            return RepositoryContext.Accounts.Find(Id);
         }
         public virtual async Task<Account> GetByIdAsync(int? Id)
         {
-            return await _context.Accounts.FindAsync(Id.Value);
+            return await RepositoryContext.Accounts.FindAsync(Id.Value);
         }
         public virtual async Task<Account> GetByAccountIdAsync(int? accountId)
         {
-            var list = await _context.Accounts.ToListAsync();
-            
+            var list = await RepositoryContext.Accounts.ToListAsync();
+
             Account entity = list.FirstOrDefault(x => x.AccountId == accountId);
             return entity;
         }
         public virtual async Task<Account> GetByAccountNumberAsync(string? number)
         {
-            var list = await _context.Accounts.ToListAsync();
+            var list = await RepositoryContext.Accounts.ToListAsync();
             Account entity = list.FirstOrDefault(x => x.AccountNumber == number);
             return entity;
         }
         public virtual async Task<Account> GetByAccountNameAsync(string? name)
         {
-            var list = await _context.Accounts.ToListAsync();
+            var list = await RepositoryContext.Accounts.ToListAsync();
             Account entity = list.FirstOrDefault(x => x.AccountName == name);
             return entity;
         }
@@ -65,7 +64,7 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
         {
             if (entity != null)
             {
-                _context.Accounts.Add(entity);
+                RepositoryContext.Accounts.Add(entity);
             }
         }
         public virtual async Task AddAsync(Account entity)
@@ -78,7 +77,7 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
             {
                 if (entity != null)
                 {
-                    await _context.Accounts.AddAsync(entity);
+                    await RepositoryContext.Accounts.AddAsync(entity);
                 }
             }
             catch (Exception ex)
@@ -96,10 +95,10 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
             {
                 if (entity != null)
                 {
-                    ShowEntityState(_context);
-                    _context.Entry(entity).State = EntityState.Modified;
-                    _context.Entry(entity).Property(x => x.AccountId).IsModified = false;
-                    ShowEntityState(_context);
+                    ShowEntityState(RepositoryContext);
+                    RepositoryContext.Entry(entity).State = EntityState.Modified;
+                    RepositoryContext.Entry(entity).Property(x => x.AccountId).IsModified = false;
+                    ShowEntityState(RepositoryContext);
                 }
             }
             catch (Exception ex)
@@ -109,7 +108,7 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
         }
         public virtual void Save()
         {
-            _context.SaveChanges();
+            RepositoryContext.SaveChanges();
         }
         public virtual async Task<int> SaveAsync(CancellationToken ct)
         {
@@ -123,9 +122,9 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
 
             try
             {
-                using (tx = await _context.Database.BeginTransactionAsync())
+                using (tx = await RepositoryContext.Database.BeginTransactionAsync())
                 {
-                    records = await _context.SaveChangesAsync();
+                    records = await RepositoryContext.SaveChangesAsync();
                     await tx.CommitAsync();
                     return records;
                 }
@@ -165,10 +164,10 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
         }
         public virtual void Delete(int Id)
         {
-            Account AccountEntity = _context.Accounts.Find(Id);
-            _context.Accounts.Remove(AccountEntity);
+            Account AccountEntity = RepositoryContext.Accounts.Find(Id);
+            RepositoryContext.Accounts.Remove(AccountEntity);
         }
-        public static void ShowEntityState(BankingContext context)
+        public static void ShowEntityState(RepositoryContext context)
         {
             foreach (EntityEntry entry in context.ChangeTracker.Entries())
             {
@@ -189,12 +188,70 @@ namespace SimpleBankWebAPI.EFCoreDataAccess
             {
                 if (disposing)
                 {
-                    _context.Dispose();
+                    RepositoryContext.Dispose();
                 }
             }
             this.disposed = true;
         }
 
+        public virtual void TakeMoneyFromAccount(Account entity, decimal? deduction)
+        {
+            // GET current balance.
+            var current = entity.SavingsBalance;
 
+            // DEDUCT from current.
+            var remaining = (current - deduction);
+
+            // APPLY remaining balance.
+            entity.SavingsBalance = remaining;
+            entity.UpdatedDate = DateTime.UtcNow;
+
+            string amountStr = "0.00";
+            amountStr = Convert.ToDouble(remaining).ToString("N2");
+            entity.UpdatedBy = "Deducted amount: " + amountStr;
+
+            // UPDATE Account state.
+            ShowEntityState(RepositoryContext);
+            RepositoryContext.Entry(entity).State = EntityState.Modified;
+            RepositoryContext.Entry(entity).Property(x => x.AccountName).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountType).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountNumber).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountNumber).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CheckingBalance).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreditBalance).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+            ShowEntityState(RepositoryContext);
+        }
+        public virtual void SendMoneyToAccount(Account entity, decimal? amount)
+        {
+            // GET current balance.
+            var current = entity.SavingsBalance;
+
+            // ADD to current.
+            var balance = (current + amount);
+
+            // APPLY new balance.
+            entity.SavingsBalance = balance;
+            entity.UpdatedDate = DateTime.UtcNow;
+
+            string amountStr = "0.00";
+            amountStr = Convert.ToDouble(balance).ToString("N2");
+            entity.UpdatedBy = "Added amount: " + amountStr;
+
+
+            // UPDATE Account state.
+            ShowEntityState(RepositoryContext);
+            RepositoryContext.Entry(entity).State = EntityState.Modified;
+            RepositoryContext.Entry(entity).Property(x => x.AccountName).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountType).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountNumber).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.AccountNumber).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CheckingBalance).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreditBalance).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+            RepositoryContext.Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+            ShowEntityState(RepositoryContext);
+        }
     }
 }

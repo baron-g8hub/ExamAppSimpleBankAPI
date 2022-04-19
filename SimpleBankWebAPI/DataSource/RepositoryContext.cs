@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleBankWebAPI.Models;
 
-namespace SimpleBankWebAPI.EFCoreDataAccess
+namespace SimpleBankWebAPI
 {
-    public class BankingContext : DbContext
+    public class RepositoryContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<PostedTransaction> PostedTransactions { get; set; }
 
-        public BankingContext(DbContextOptions<BankingContext> options)
+
+        public RepositoryContext(DbContextOptions<RepositoryContext> options)
             : base(options)
         {
         }

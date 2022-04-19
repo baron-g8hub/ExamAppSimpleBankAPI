@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleBankWebAPI.Controllers;
+using SimpleBankWebAPI.DataContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,13 @@ namespace SimpleBankWebAPI.Tests
     {
         public IConfiguration? _configuration;
         TransactionsAPIController _controller;
+        private readonly IPostedTransactionsRepository _repository;
 
         public TransactionsAPIControllerTests()
         {
             IServiceCollection services = new ServiceCollection();
             services.AddSingleton<IConfiguration>(Configuration);
-            _controller = new TransactionsAPIController(_configuration);
+            _controller = new TransactionsAPIController(_configuration, _repository);
         }
 
 
@@ -45,6 +47,7 @@ namespace SimpleBankWebAPI.Tests
             Assert.Equal(count, returnTransactions?.Count());
         }
 
+
         [Theory]
         [InlineData(26, 0)]
         //[InlineData("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200", "ab2bd817-98cd-4cf3-a80a-53ea0cd9c111")]
@@ -66,7 +69,7 @@ namespace SimpleBankWebAPI.Tests
             var item = okResult.Result as OkObjectResult;
 
             //We Expect to return a single item
-            Assert.IsType<Transaction>(item?.Value);
+            Assert.IsType<Account>(item?.Value);
 
             //Now, let us check the value itself.
             var value = item?.Value as Transaction;
