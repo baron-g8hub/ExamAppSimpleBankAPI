@@ -61,18 +61,15 @@ namespace SimpleBankWebAPI.Controllers
             {
                 return BadRequest();
             }
-
+            //account.UpdatedDate = DateTime.UtcNow;
+            //account.UpdatedBy = "Admin";
+            //account.CreatedDate = DateTime.UtcNow;
+            //account.CreatedBy = "Admin";
+            var entity = _repository.Accounts.GetAccountById(id);
+            entity.SavingsBalance = account.SavingsBalance;
+            _repository.Accounts.UpdateAccount(entity);
             try
             {
-                //account.UpdatedDate = DateTime.UtcNow;
-                //account.UpdatedBy = "Admin";
-                //account.CreatedDate = DateTime.UtcNow;
-                //account.CreatedBy = "Admin";
-
-                var entity = _repository.Accounts.GetAccountById(id);
-                entity.SavingsBalance = account.SavingsBalance;
-
-                _repository.Accounts.UpdateAccount(entity);
                 await _repository.Accounts.SaveAsync(ct);
             }
             catch (DbUpdateConcurrencyException ex)

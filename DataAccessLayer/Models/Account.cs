@@ -17,9 +17,12 @@ namespace DataAccessLayer.Models
         public string AccountName { get; set; } = null!;
         public int? AccountType { get; set; }
         public string? AccountNumber { get; set; }
-        //[Column(TypeName = "money")]
-        [Column(TypeName = "decimal(18,2)")]
+
+       
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
         public decimal? SavingsBalance { get; set; }
+
         [Column(TypeName = "money")]
         public decimal? CheckingBalance { get; set; }
         [Column(TypeName = "money")]
@@ -36,6 +39,8 @@ namespace DataAccessLayer.Models
         [Unicode(false)]
         public string? UpdatedBy { get; set; }
 
+
+        [ConcurrencyCheck]
         [Timestamp]
         public byte[]? RowVersion { get; set; }
     }
