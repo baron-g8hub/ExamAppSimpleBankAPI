@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataAccessLayer.DataContextEFCore;
+using Microsoft.EntityFrameworkCore;
 using SimpleBankWebAPI.Contracts;
 using System.Linq.Expressions;
 
@@ -6,10 +7,10 @@ namespace SimpleBankWebAPI.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected RepositoryContext RepositoryContext { get; set; }
-        public RepositoryBase(RepositoryContext repositoryContext)
+        protected ApplicationDBContext _context { get; set; }
+        public RepositoryBase(ApplicationDBContext repositoryContext)
         {
-            RepositoryContext = repositoryContext;
+            _context = repositoryContext;
         }
 
         //public IQueryable<T> FindAll() => RepositoryContext.Set<T>().AsNoTracking();

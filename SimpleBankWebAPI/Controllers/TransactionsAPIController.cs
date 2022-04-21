@@ -1,10 +1,9 @@
 ﻿using BusinessLogicLayer;
-using Entities;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SimpleBankWebAPI.Contracts;
 using SimpleBankWebAPI.Models;
-using Account = SimpleBankWebAPI.Models.Account;
 
 namespace SimpleBankWebAPI.Controllers
 {
@@ -29,7 +28,7 @@ namespace SimpleBankWebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Transaction>>> Get()
+        public async Task<ActionResult<IEnumerable<PostedTransaction>>> Get()
         {
             var list = await _repository.PostedTransactions.GetAllAsync();
             return Ok(list);
@@ -37,7 +36,7 @@ namespace SimpleBankWebAPI.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> Get(int? id)
+        public async Task<ActionResult<PostedTransaction>> Get(int? id)
         {
             try
             {
@@ -64,34 +63,38 @@ namespace SimpleBankWebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Transfer([FromBody] Transaction transaction)
+        public async Task<IActionResult> Transfer([FromBody] PostedTransaction transaction)
         {
             try
             {
-                if (!ModelState.IsValid || (transaction.AccountNumber == "" || transaction.AccountNumber == "string"))
-                {
-                    return BadRequest(ModelState);
-                }
-                var mgr = new TransactionsManager(_configuration);
-                var result = await mgr.AddTransferTransactionAsync(transaction);
-                if (result == "ok")
-                {
-                    return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                //if (!ModelState.IsValid || (transaction.AccountNumber == "" || transaction.AccountNumber == "string"))
+                //{
+                //    return BadRequest(ModelState);
+                //}
+                //var mgr = new TransactionsManager(_configuration);
+                //transaction.TransactionType_ID = 1;
+                //transaction.AccountType = 1;
+                //transaction.Description = "Send money to " + transaction.DestinationAccount;
+                //var result = await mgr.AddTransferTransactionAsync(transaction);
+                //if (result == "ok")
+                //{
+                //    return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
+                //}
+                //else
+                //{
+                //    return BadRequest(result);
+                //}
             }
             catch (Exception ex)
             {
                 return this.StatusCode(400, ex.Message);
             }
+            return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateTransaction([FromBody] Transaction transaction)
+        public async Task<IActionResult> CreateTransaction([FromBody] PostedTransaction transaction)
         {
             try
             {
@@ -133,7 +136,7 @@ namespace SimpleBankWebAPI.Controllers
 
 
                     await _repository.PostedTransactions.SaveAsync(ct);
-                    return CreatedAtAction("Get", new { id = transaction.Transaction_ID }, transaction);
+                    return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
                 }
             }
             catch (Exception ex)
@@ -144,7 +147,7 @@ namespace SimpleBankWebAPI.Controllers
             {
 
             }
-            return CreatedAtAction("Get", new { id = transaction.Transaction_ID }, transaction);
+            return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
         }
 
 

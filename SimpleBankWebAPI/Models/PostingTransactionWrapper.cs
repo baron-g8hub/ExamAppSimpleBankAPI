@@ -1,4 +1,6 @@
-﻿namespace SimpleBankWebAPI.Models
+﻿using DataAccessLayer.Models;
+
+namespace SimpleBankWebAPI.Models
 {
     public class PostingTransactionWrapper
     {

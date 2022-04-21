@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleBankWebAPI.Contracts;
 using SimpleBankWebAPI.Repository;
 using SimpleBankWebAPI;
+using DataAccessLayer.DataContextEFCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 //builder.Services.AddDbContext<BankingContext>(options => options.UseSqlServer("name=ConnectionStrings:BankingContext"));
 
-builder.Services.AddDbContext<RepositoryContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connectionString));
 
 // NOTE: Should add here the environment variable to be used in CI/CD
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);

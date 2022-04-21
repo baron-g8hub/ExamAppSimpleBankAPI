@@ -5,8 +5,8 @@ namespace SimpleBankWebAPI
 {
     public class RepositoryContext : DbContext
     {
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<PostedTransaction> PostedTransactions { get; set; }
+        //public DbSet<Account> Accounts { get; set; }
+        //public DbSet<PostedTransaction> PostedTransactions { get; set; }
 
 
         public RepositoryContext(DbContextOptions<RepositoryContext> options)

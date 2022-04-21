@@ -1,4 +1,5 @@
-﻿using SimpleBankWebAPI.Models;
+﻿using DataAccessLayer.Models;
+using SimpleBankWebAPI.Models;
 
 namespace SimpleBankWebAPI.Contracts
 {

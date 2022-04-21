@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataAccessLayer.DataContextEFCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SimpleBankWebAPI.Contracts;
 using SimpleBankWebAPI.Models;
@@ -8,7 +9,7 @@ namespace SimpleBankWebAPI.Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
 
-        private RepositoryContext _repoContext;
+        private ApplicationDBContext _repoContext;
         private IAccountsServiceRepository _account;
         private IPostedTransactionsRepository _transaction;
 
@@ -35,7 +36,7 @@ namespace SimpleBankWebAPI.Repository
             }
         }
 
-        public RepositoryWrapper(RepositoryContext repositoryContext)
+        public RepositoryWrapper(ApplicationDBContext repositoryContext)
         {
             _repoContext = repositoryContext;
         }
