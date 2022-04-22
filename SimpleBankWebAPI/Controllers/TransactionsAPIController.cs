@@ -11,10 +11,7 @@ namespace SimpleBankWebAPI.Controllers
     public class TransactionsAPIController : ControllerBase
     {
         public IConfiguration _configuration;
-        //private readonly IAccountsServiceRepository _repoAccounts;
-        //private readonly IPostedTransactionsRepository _repoPostedTransactions;
         private IRepositoryWrapper _repository;
-        // public TransactionService _service;
 
         // Define the cancellation token.
         CancellationTokenSource _cts = null;
@@ -61,45 +58,13 @@ namespace SimpleBankWebAPI.Controllers
             }
         }
 
-
-        [HttpPost]
-        public IActionResult Transfer([FromBody] PostedTransaction transaction)
-        {
-            try
-            {
-                //if (!ModelState.IsValid || (transaction.AccountNumber == "" || transaction.AccountNumber == "string"))
-                //{
-                //    return BadRequest(ModelState);
-                //}
-                //var mgr = new TransactionsManager(_configuration);
-                //transaction.TransactionType_ID = 1;
-                //transaction.AccountType = 1;
-                //transaction.Description = "Send money to " + transaction.DestinationAccount;
-                //var result = await mgr.AddTransferTransactionAsync(transaction);
-                //if (result == "ok")
-                //{
-                //    return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
-                //}
-                //else
-                //{
-                //    return BadRequest(result);
-                //}
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(400, ex.Message);
-            }
-            return CreatedAtAction("Get", new { name = transaction.AccountNumber }, transaction);
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody] PostedTransaction transaction)
         {
             try
             {
                 _cts = new CancellationTokenSource();
-                //_cts.CancelAfter(4000);
+                _cts.CancelAfter(6000);
 
                 //Fetch the Token
                 CancellationToken ct = _cts.Token;
@@ -127,7 +92,7 @@ namespace SimpleBankWebAPI.Controllers
                     transaction.Description = "Transfered: " + transaction.Amount + " to " + recepientAccount.AccountNumber + " | " + recepientAccount.AccountName;
                     transaction.RunningBalance = remaining;
                     await _repository.PostedTransactions.AddTransactionAsync(transaction);
-                    await _repository.SaveAsync();
+                    await _repository.SaveAsync(ct);
 
                     return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
                 }
@@ -148,9 +113,6 @@ namespace SimpleBankWebAPI.Controllers
             }
             return NoContent();
         }
-
-
-
 
         private bool IsExists(int id)
         {

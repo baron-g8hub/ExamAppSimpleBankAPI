@@ -153,7 +153,11 @@ namespace SimpleBankWebAPI.Controllers
                             ModelState.ClearValidationState("DestinationAccount");
                             ModelState.AddModelError("DestinationAccount", apiResponse);
                         }
-                        return View();
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, apiResponse);
+                        }
+                        return View(model);
                     }
                 }
                 return RedirectToAction(nameof(Index));
