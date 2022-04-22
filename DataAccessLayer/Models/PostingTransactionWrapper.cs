@@ -5,12 +5,12 @@ namespace DataAccessLayer.Models
     {
         public PostingTransactionWrapper()
         {
-            PostedTransaction = null;
-            SourceAccount = null;
-            DestinationAccount = null;
+            PostedTransaction = new PostedTransaction();
+            SourceAccount = new Account();
+            DestinationAccount = new Account();
         }
 
-
+        public double Amount { get; set; }
         public PostedTransaction PostedTransaction { get; set; }
         public Account SourceAccount { get; set; }
         public Account DestinationAccount { get; set; }

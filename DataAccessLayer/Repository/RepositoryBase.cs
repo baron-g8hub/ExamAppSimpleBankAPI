@@ -7,10 +7,10 @@ namespace DataAccessLayer.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected ApplicationDBContext Repository { get; set; }
-        public RepositoryBase(ApplicationDBContext repositoryContext)
+        protected ApplicationDBContext _context { get; set; }
+        public RepositoryBase(ApplicationDBContext dbcontext)
         {
-            Repository = repositoryContext;
+            _context = dbcontext;
         }
 
         //public IQueryable<T> FindAll() => RepositoryContext.Set<T>().AsNoTracking();

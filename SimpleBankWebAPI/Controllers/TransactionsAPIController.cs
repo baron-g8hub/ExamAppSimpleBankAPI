@@ -93,7 +93,7 @@ namespace SimpleBankWebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateTransaction([FromBody] PostedTransaction transaction)
+        public async Task<IActionResult> PostTransaction([FromBody] PostedTransaction transaction)
         {
             try
             {
@@ -103,38 +103,26 @@ namespace SimpleBankWebAPI.Controllers
                 CancellationToken ct = _cts.Token;
                 if (ModelState.IsValid)
                 {
-
                     //NOTED: take - 50 from Account
                     var sourceAccount = new Account();
-                    sourceAccount.AccountNumber = transaction.AccountNumber;
+                    sourceAccount = await _repository.Accounts.GetByAccountNumberAsync (transaction.AccountNumber);
+                    var available = sourceAccount.SavingsBalance;
+                    sourceAccount.SavingsBalance = (available - transaction.Amount);
+                    _repository.Accounts.UpdateAccount(sourceAccount);
 
                     //NOTED: put + 50 to Account
                     var recepientAccount = new Account();
-                    recepientAccount.AccountNumber = transaction.DestinationAccount;
+                    recepientAccount = await _repository.Accounts.GetByAccountNumberAsync(transaction.DestinationAccount);
+                    var current = sourceAccount.SavingsBalance;
+                    sourceAccount.SavingsBalance = (current + transaction.Amount);
+                    _repository.Accounts.UpdateAccount(recepientAccount);
 
-                    var wrapper = new PostingTransactionWrapper();
-                    wrapper.SourceAccount = sourceAccount;
-                    wrapper.DestinationAccount = recepientAccount;
-
-                    // _repository.Accounts.take
-
-
-
-
-
-
-
-                    //    _repository.Accounts.Update(entity);
-                    //   await _repository.PostedTransactions.SaveAsync(ct);
-
-
-
-                    //   await _repository.PostedTransactions.AddAsync(postTransaction);
-
-
-
-
+                    await _repository.PostedTransactions.AddAsync(transaction);
                     await _repository.PostedTransactions.SaveAsync(ct);
+
+
+
+
                     return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
                 }
             }

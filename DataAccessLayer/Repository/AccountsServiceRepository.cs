@@ -11,11 +11,9 @@ namespace DataAccessLayer.Repository
 {
     public class AccountsServiceRepository : RepositoryBase<Account>, IAccountsServiceRepository
     {
-        private readonly ApplicationDBContext _context;
-
         public AccountsServiceRepository(ApplicationDBContext context) : base(context)
         {
-            _context = context;
+          
         }
        
         public IQueryable<Account> GetAllAccounts()

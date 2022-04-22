@@ -11,20 +11,19 @@
         <form asp-action="Transfer">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SourceAccount" class="control-label"></label>
-                <input asp-for="SourceAccount" class="form-control" />
+                <label class="control-label">Send From:</label>
+                <select asp-for="SourceAccount" class="form-control small" asp-items="@ViewBag.Accounts"></select>
                 <span asp-validation-for="SourceAccount" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" placeholder="0.00" class="form-control" />
+                <input asp-for="Amount" placeholder="0.00" class="form-control" value="0.00" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DestinationAccount" class="control-label"></label>
-                <input asp-for="DestinationAccount" class="form-control" />
+                <label class="control-label">Destination Account:</label>
+                <select asp-for="DestinationAccount" class="form-control small" asp-items="@ViewBag.Accounts"></select>
                 <span asp-validation-for="DestinationAccount" class="text-danger"></span>
-                <input type="hidden" asp-for="RowVersion" />
             </div>
             <hr />
             <ul class="nav">

@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using DataAccessLayer.Contracts;
-
+using DataAccessLayer.Models;
+using Microsoft.Data.SqlClient;
 
 namespace DataAccessLayer.Repository
 {
@@ -12,6 +13,11 @@ namespace DataAccessLayer.Repository
         private ApplicationDBContext _repoContext;
         private IAccountsServiceRepository _account;
         private IPostedTransactionsRepository _transaction;
+
+        public RepositoryWrapper(ApplicationDBContext context)
+        {
+            _repoContext = context;
+        }
 
         public IAccountsServiceRepository Accounts
         {
@@ -35,15 +41,6 @@ namespace DataAccessLayer.Repository
                 return _transaction;
             }
         }
-
-        public RepositoryWrapper(ApplicationDBContext repositoryContext)
-        {
-            _repoContext = repositoryContext;
-        }
-
-
-     
-     
 
 
         public async Task SaveAsync()

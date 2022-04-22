@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 
@@ -69,9 +70,41 @@ namespace SimpleBankWebAPI.Controllers
             return View(vm);
         }
 
-        public ActionResult Transfer()
+        public async Task<ActionResult> Transfer()
         {
-            return View();
+            try
+            {
+                var vm = new TransferViewModel();
+                var list = new List<Account>();
+                var accounts = new List<SelectListItem>()
+                {
+                    new SelectListItem { Value = "0", Text = " Select account number " },
+                };
+                using (var httpClient = new HttpClient())
+                {
+                    var url = "http://" + HttpContext.Request.Host.Value;
+                    if (Request.Host.Host == "localhost")
+                    {
+                        url = "https://" + HttpContext.Request.Host.Value;
+                    }
+                    using (var response = await httpClient.GetAsync(url + "/AccountsApi/GetAccounts"))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string apiResponse = await response.Content.ReadAsStringAsync();
+                            list = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+                        }
+                    }
+                }
+                accounts.AddRange(list.Select(x => new SelectListItem { Value = x.AccountId.ToString(), Text = x.AccountName }).ToList());
+
+                ViewBag.Accounts = accounts.ToArray();
+                return View(vm);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
@@ -97,7 +130,7 @@ namespace SimpleBankWebAPI.Controllers
                     {
                         url = "https://" + HttpContext.Request.Host.Value;
                     }
-                    HttpResponseMessage result = await httpClient.PostAsync(url + "/TransactionsApi/Transfer", byteContent);
+                    HttpResponseMessage result = await httpClient.PostAsync(url + "/TransactionsApi/PostTransaction", byteContent);
                     if (result.IsSuccessStatusCode)
                     {
                         response = result.StatusCode.ToString();

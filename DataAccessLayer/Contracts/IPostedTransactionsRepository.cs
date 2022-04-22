@@ -13,6 +13,6 @@ namespace DataAccessLayer.Contracts
         Task AddAsync(PostedTransaction entity);
         void Save();
         Task<int> SaveAsync(CancellationToken cancellationtoken);
-        Task<int> PostTransactionAsync(CancellationToken ct, PostingTransactionWrapper wrapper);
+      // Task<int> PostTransactionAsync(CancellationToken ct, PostingTransactionWrapper wrapper);
     }
 }

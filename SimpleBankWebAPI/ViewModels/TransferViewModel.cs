@@ -9,12 +9,16 @@ namespace SimpleBankWebAPI
         public TransferViewModel()
         {
             Entity = new PostedTransaction();
-            EntityList = new List<PostedTransaction>();
+            EntityList = new List<PostedTransaction> { new PostedTransaction() };
+            AccountList = new List<Account> { new Account() };
         }
 
         public PostedTransaction Entity { get; set; }
 
+        public List<Account> AccountList { get; set; }
+
         public List<PostedTransaction> EntityList { get; set; }
+
 
         [Required]
         [Display(Name = "Source Account")]
@@ -22,6 +26,7 @@ namespace SimpleBankWebAPI
 
         [Required]
         [Display(Name = "Amount")]
+        [DataType(DataType.Currency)]
         public double Amount { get; set; }
 
         [Required]

@@ -14,23 +14,23 @@ namespace DataAccessLayer.Repository
     {
         public PostedTransactionsRepository(ApplicationDBContext context) : base(context)
         {
-            this.Repository = context;
+           
         }
 
         public IQueryable<PostedTransaction> SelectAll()
         {
-            return Repository.Set<PostedTransaction>();
+            return _context.Set<PostedTransaction>();
         }
         public IEnumerable<PostedTransaction> GetAll()
         {
-            return Repository.PostedTransactions.ToList();
+            return _context.PostedTransactions.ToList();
         }
         public virtual async Task<ICollection<PostedTransaction>> GetAllAsync()
         {
             try
             {
                 //var list = await RepositoryContext.PostedTransactions.ToListAsync();
-                return await Repository.Set<PostedTransaction>().ToListAsync();
+                return await _context.Set<PostedTransaction>().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -39,94 +39,18 @@ namespace DataAccessLayer.Repository
         }
         public virtual PostedTransaction GetById(int Id)
         {
-            return Repository.PostedTransactions.Find(Id);
+            return _context.PostedTransactions.Find(Id);
         }
         public virtual async Task<PostedTransaction> GetByIdAsync(int? Id)
         {
-            return await Repository.PostedTransactions.FindAsync(Id.Value);
+            return await _context.PostedTransactions.FindAsync(Id.Value);
         }
         public virtual PostedTransaction GetTransactionById(int id)
         {
-            return Repository.PostedTransactions.Find(id);
+            return _context.PostedTransactions.Find(id);
         }
 
-        public virtual async Task<int> PostTransactionAsync(CancellationToken ct, PostingTransactionWrapper wrapper)
-        {
-            int records = 0;
-            IDbContextTransaction tx = null;
-            //await Task.Delay(5000);
-            if (ct.IsCancellationRequested)
-            {
-                ct.ThrowIfCancellationRequested();
-            }
-            try
-            {
-                using (tx = await Repository.Database.BeginTransactionAsync())
-                {
-                    //try
-                    //{
-                    //    // 1. TakeMoneyFromAccount
-                    //    var takeAmount = wrapper.PostedTransaction.Amount;
-                    //    TakeMoneyFromAccount(wrapper.SourceAccount, takeAmount);
-
-                    //    // 2. SendMoneyToAccount 
-                    //    SendMoneyToAccount(wrapper.DestinationAccount, takeAmount);
-
-                    //    // 3. Assemble Transaction Details
-                    //    PostedTransaction postedTransaction = wrapper.PostedTransaction;
-
-                    //    // 4. Add PostingTransaction 
-                    //    await AddAsync(postedTransaction);
-
-                    //    // 5. Save state changes
-                    //    records = await RepositoryContext.SaveChangesAsync();
-
-                    //    // *** If we reach here then DBUPDATE is successfull. ***
-
-                    //    // 6. Commit changes from state to database
-                    //    await tx.CommitAsync();
-                    //    return records;
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    // NOTE: Apply Rollback when failed to process.
-                    //    //throw;
-                    //}
-                }
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                foreach (var entry in ex.Entries)
-                {
-                    if (entry.Entity is Account)
-                    {
-                        var proposedValues = entry.CurrentValues;
-                        var databaseValues = entry.GetDatabaseValues();
-
-                        foreach (var property in proposedValues.Properties)
-                        {
-                            var proposedValue = proposedValues[property];
-                            var databaseValue = databaseValues[property];
-                        }
-
-                        // Refresh original values to bypass next concurrency check
-                        entry.OriginalValues.SetValues(databaseValues);
-                    }
-                    else
-                    {
-                        throw new NotSupportedException("Unable to save changes. The book details was updated by another user. " + entry.Metadata.Name);
-                    }
-                }
-                throw ex;
-            }
-            catch (DbUpdateException ex)
-            {
-                SqlException s = ex.InnerException as SqlException;
-                var errorMessage = $"{ex.Message}" + " {ex?.InnerException.Message}" + " rolling back…";
-                tx.Rollback();
-            }
-            return records;
-        }
+     
        
 
         public void Update(Account entity)
@@ -143,7 +67,7 @@ namespace DataAccessLayer.Repository
             {
                 if (entity != null)
                 {
-                    await Repository.PostedTransactions.AddAsync(entity);
+                    await _context.PostedTransactions.AddAsync(entity);
                 }
             }
             catch (Exception ex)
@@ -153,7 +77,7 @@ namespace DataAccessLayer.Repository
         }
         public virtual void Save()
         {
-            Repository.SaveChanges();
+            _context.SaveChanges();
         }
         public virtual async Task<int> SaveAsync(CancellationToken ct)
         {
@@ -166,9 +90,9 @@ namespace DataAccessLayer.Repository
             }
             try
             {
-                using (tx = await Repository.Database.BeginTransactionAsync())
+                using (tx = await _context.Database.BeginTransactionAsync())
                 {
-                    records = await Repository.SaveChangesAsync();
+                    records = await _context.SaveChangesAsync();
                     await tx.CommitAsync();
                     return records;
                 }
@@ -227,7 +151,7 @@ namespace DataAccessLayer.Repository
             {
                 if (disposing)
                 {
-                    Repository.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;
