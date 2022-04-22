@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.Models;
+
 
 namespace SimpleBankWebAPI.Repository
 {

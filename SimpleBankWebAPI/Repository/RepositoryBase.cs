@@ -7,10 +7,10 @@ namespace SimpleBankWebAPI.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected ApplicationDBContext _context { get; set; }
+        protected ApplicationDBContext Repository { get; set; }
         public RepositoryBase(ApplicationDBContext repositoryContext)
         {
-            _context = repositoryContext;
+            Repository = repositoryContext;
         }
 
         //public IQueryable<T> FindAll() => RepositoryContext.Set<T>().AsNoTracking();

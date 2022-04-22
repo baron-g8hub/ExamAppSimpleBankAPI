@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using SimpleBankWebAPI.Models;
+using SimpleBankWebAPI.ViewModels;
 
 namespace SimpleBankWebAPI.Controllers
 {

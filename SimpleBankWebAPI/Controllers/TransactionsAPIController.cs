@@ -3,7 +3,7 @@ using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.Models;
+using SimpleBankWebAPI.ViewModels;
 
 namespace SimpleBankWebAPI.Controllers
 {
@@ -63,7 +63,7 @@ namespace SimpleBankWebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Transfer([FromBody] PostedTransaction transaction)
+        public IActionResult Transfer([FromBody] PostedTransaction transaction)
         {
             try
             {

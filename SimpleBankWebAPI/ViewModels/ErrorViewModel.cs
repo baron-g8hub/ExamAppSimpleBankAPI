@@ -1,5 +1,6 @@
-namespace SimpleBankWebAPI.Models
-{
+namespace SimpleBankWebAPI
+{ 
+
     public class ErrorViewModel
     {
         public string? RequestId { get; set; }

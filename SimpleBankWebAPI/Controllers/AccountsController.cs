@@ -68,6 +68,7 @@ namespace SimpleBankWebAPI.Controllers
                         vm.AccountName = entity.AccountName;
                         vm.AccountType = entity.AccountType;
                         vm.SavingsBalance = entity.SavingsBalance;
+                        vm.RowVersion = entity.RowVersion;
                     }
                 }
                 return View(vm);
@@ -97,7 +98,7 @@ namespace SimpleBankWebAPI.Controllers
                         {
                             url = "https://" + HttpContext.Request.Host.Value;
                         }
-                        if (model.AccountId != 0 && entity.AccountName != "")
+                        if (entity.AccountName != "" && model.RowVersion != null)
                         {
                             entity.AccountId = model.AccountId;
                             entity.AccountNumber = model.AccountId.ToString();
@@ -159,10 +160,37 @@ namespace SimpleBankWebAPI.Controllers
             return View();
         }
 
-        //public ActionResult Edit(int id)
+
+        //public async Task<ActionResult> EditAccount(string id)
         //{
-        //    return View();
+        //    try
+        //    {
+        //        var vm = new AccountsViewModel();
+        //        var list = new List<Account>();
+        //        using (var httpClient = new HttpClient())
+        //        {
+        //            var url = "http://" + HttpContext.Request.Host.Value;
+        //            if (Request.Host.Host == "localhost")
+        //            {
+        //                url = "https://" + HttpContext.Request.Host.Value;
+        //            }
+        //            using (var response = await httpClient.GetAsync(url + "/AccountsApi/GetAccounts"))
+        //            {
+        //                if (response.IsSuccessStatusCode)
+        //                {
+        //                    string apiResponse = await response.Content.ReadAsStringAsync();
+        //                    vm.EntityList = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+        //                }
+        //            }
+        //        }
+        //        return View(vm);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
         //}
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]

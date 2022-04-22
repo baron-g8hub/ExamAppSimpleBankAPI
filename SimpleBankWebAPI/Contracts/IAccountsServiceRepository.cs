@@ -1,5 +1,5 @@
 ﻿using DataAccessLayer.Models;
-using SimpleBankWebAPI.Models;
+
 
 namespace SimpleBankWebAPI.Contracts
 {

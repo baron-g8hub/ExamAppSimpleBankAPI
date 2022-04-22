@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.Models;
+
 
 namespace SimpleBankWebAPI.Controllers
 {

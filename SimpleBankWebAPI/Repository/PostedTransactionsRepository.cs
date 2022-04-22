@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.Models;
+using SimpleBankWebAPI.ViewModels;
 using System.Transactions;
 
 namespace SimpleBankWebAPI.Repository
@@ -15,23 +15,23 @@ namespace SimpleBankWebAPI.Repository
     {
         public PostedTransactionsRepository(ApplicationDBContext context) : base(context)
         {
-            this._context = context;
+            this.Repository = context;
         }
 
         public IQueryable<PostedTransaction> SelectAll()
         {
-            return _context.Set<PostedTransaction>();
+            return Repository.Set<PostedTransaction>();
         }
         public IEnumerable<PostedTransaction> GetAll()
         {
-            return _context.PostedTransactions.ToList();
+            return Repository.PostedTransactions.ToList();
         }
         public virtual async Task<ICollection<PostedTransaction>> GetAllAsync()
         {
             try
             {
                 //var list = await RepositoryContext.PostedTransactions.ToListAsync();
-                return await _context.Set<PostedTransaction>().ToListAsync();
+                return await Repository.Set<PostedTransaction>().ToListAsync();
             }
             catch (Exception ex)
             {
@@ -40,15 +40,15 @@ namespace SimpleBankWebAPI.Repository
         }
         public virtual PostedTransaction GetById(int Id)
         {
-            return _context.PostedTransactions.Find(Id);
+            return Repository.PostedTransactions.Find(Id);
         }
         public virtual async Task<PostedTransaction> GetByIdAsync(int? Id)
         {
-            return await _context.PostedTransactions.FindAsync(Id.Value);
+            return await Repository.PostedTransactions.FindAsync(Id.Value);
         }
         public virtual PostedTransaction GetTransactionById(int id)
         {
-            return _context.PostedTransactions.Find(id);
+            return Repository.PostedTransactions.Find(id);
         }
 
         public virtual async Task<int> PostTransactionAsync(CancellationToken ct, PostingTransactionWrapper wrapper)
@@ -62,7 +62,7 @@ namespace SimpleBankWebAPI.Repository
             }
             try
             {
-                using (tx = await _context.Database.BeginTransactionAsync())
+                using (tx = await Repository.Database.BeginTransactionAsync())
                 {
                     //try
                     //{
@@ -144,7 +144,7 @@ namespace SimpleBankWebAPI.Repository
             {
                 if (entity != null)
                 {
-                    await _context.PostedTransactions.AddAsync(entity);
+                    await Repository.PostedTransactions.AddAsync(entity);
                 }
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace SimpleBankWebAPI.Repository
         }
         public virtual void Save()
         {
-            _context.SaveChanges();
+            Repository.SaveChanges();
         }
         public virtual async Task<int> SaveAsync(CancellationToken ct)
         {
@@ -167,9 +167,9 @@ namespace SimpleBankWebAPI.Repository
             }
             try
             {
-                using (tx = await _context.Database.BeginTransactionAsync())
+                using (tx = await Repository.Database.BeginTransactionAsync())
                 {
-                    records = await _context.SaveChangesAsync();
+                    records = await Repository.SaveChangesAsync();
                     await tx.CommitAsync();
                     return records;
                 }
@@ -228,7 +228,7 @@ namespace SimpleBankWebAPI.Repository
             {
                 if (disposing)
                 {
-                    _context.Dispose();
+                    Repository.Dispose();
                 }
             }
             this.disposed = true;
