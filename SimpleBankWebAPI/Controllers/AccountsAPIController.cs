@@ -44,8 +44,7 @@ namespace SimpleBankWebAPI.Controllers
             return account;
         }
 
-        // PUT: api/AccountsAPI/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+      
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, Account account)
         {
@@ -98,94 +97,37 @@ namespace SimpleBankWebAPI.Controllers
 
 
 
+     
+        
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Account entity)
+        public async Task<ActionResult<Account>> PostAccount(Account account)
         {
             _cts = new CancellationTokenSource();
             // send a cancel after 4000 ms or call cts.Cancel();
             // _cts.CancelAfter(4000);
             CancellationToken ct = _cts.Token;
+
             try
             {
-                var result = "";
-                if (!ModelState.IsValid || (entity.AccountName == "" || entity.AccountName == "string"))
-                {
-                    return BadRequest(ModelState);
-                }
-                entity.CreatedDate = DateTime.UtcNow;
-                entity.UpdatedDate = DateTime.UtcNow;
-                entity.CreatedBy = "Admin";
-                entity.UpdatedBy = "Admin";
-                entity.AccountType = 1;
-                if (AccountExists(entity.AccountName))
-                {
-                    _repository.Accounts.UpdateAccount(entity);
-                }
-                else
-                {
-                    await _repository.Accounts.AddAsync(entity);
-                }
-
+                account.CreatedDate = DateTime.UtcNow;
+                account.UpdatedDate = DateTime.UtcNow;
+                account.CreatedBy = "Admin";
+                account.UpdatedBy = "Admin";
+                account.AccountType = 1;
+                await _repository.Accounts.AddAsync(account);
                 int ret = await _repository.Accounts.SaveAsync(ct);
                 if (ret == 1)
                 {
-                    entity.AccountNumber = entity.AccountId.ToString();
-                    _repository.Accounts.UpdateAccount(entity);
-                    await _repository.Accounts.SaveAsync(ct);
-                }
-
-                if (AccountExists(entity.AccountName))
-                {
-                    result = entity.AccountName + " account created successfully.";
-                    return CreatedAtAction("Get", new { name = entity.AccountName }, entity);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(400, ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update([FromBody] Account account)
-        {
-            _cts = new CancellationTokenSource();
-            // send a cancel after 4000 ms or call cts.Cancel();
-            _cts.CancelAfter(4000);
-            //Fetch the Token
-            CancellationToken ct = _cts.Token;
-
-            try
-            {
-                if (account.AccountName == "")
-                {
-                    return BadRequest();
-                }
-                try
-                {
-                    account.UpdatedDate = DateTime.UtcNow;
-                    account.UpdatedBy = "Admin";
+                    account.AccountNumber = account.AccountId.ToString();
                     _repository.Accounts.UpdateAccount(account);
                     await _repository.Accounts.SaveAsync(ct);
                 }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message.ToString());
-                    return BadRequest();
-                }
-                finally
-                {
-                    _cts.Dispose();
-                }
-                return Ok("Account updated successfully.");
+                return CreatedAtAction("GetAccount", new { id = account.AccountName }, account);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return this.StatusCode(400, ex.Message);
+
+                throw;
             }
         }
 

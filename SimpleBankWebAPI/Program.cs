@@ -9,13 +9,22 @@ using DataAccessLayer.DataContextEFCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var provider = builder.Services.BuildServiceProvider();
-var configuration = provider.GetRequiredService<IConfiguration>();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DBCoreContext' not found.")));
+
+
+var assembly = typeof(Program).Assembly.GetName().Name;
+var defaultConnString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+
+//var provider = builder.Services.BuildServiceProvider();
+//var configuration = provider.GetRequiredService<IConfiguration>();
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 //builder.Services.AddDbContext<BankingContext>(options => options.UseSqlServer("name=ConnectionStrings:BankingContext"));
 
-builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connectionString));
+
 
 // NOTE: Should add here the environment variable to be used in CI/CD
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);

@@ -97,34 +97,51 @@ namespace SimpleBankWebAPI.Controllers
                         {
                             url = "https://" + HttpContext.Request.Host.Value;
                         }
-                        if (model.AccountId != 0 || entity.AccountName != "")
+                        if (model.AccountId != 0 && entity.AccountName != "")
                         {
                             entity.AccountId = model.AccountId;
                             entity.AccountNumber = model.AccountId.ToString();
                             url += "/AccountsApi/PutAccount/" + model.AccountName.ToString();
+                            var myContent = JsonConvert.SerializeObject(entity);
+                            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                            var byteContent = new ByteArrayContent(buffer);
+                            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                            HttpResponseMessage result = await httpClient.PutAsync(url, byteContent);
+                            if (result.IsSuccessStatusCode)
+                            {
+                                response = result.StatusCode.ToString();
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                string apiResponse = await result.Content.ReadAsStringAsync();
+                                ModelState.AddModelError(string.Empty, apiResponse);
+                                //ModelState.ClearValidationState("AccountName");
+                                //ModelState.AddModelError("AccountName", apiResponse);
+                                ViewBag.accountTypes = model.LoadAccountTypes();
+                            }
                         }
                         else
                         {
-                            url += "/AccountsApi/Add";
-                        }
-
-                        var myContent = JsonConvert.SerializeObject(entity);
-                        var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
-                        var byteContent = new ByteArrayContent(buffer);
-                        byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                        HttpResponseMessage result = await httpClient.PutAsync(url, byteContent);
-                        if (result.IsSuccessStatusCode)
-                        {
-                            response = result.StatusCode.ToString();
-                            return RedirectToAction(nameof(Index));
-                        }
-                        else
-                        {
-                            string apiResponse = await result.Content.ReadAsStringAsync();
-                            ModelState.AddModelError(string.Empty, apiResponse);
-                            //ModelState.ClearValidationState("AccountName");
-                            //ModelState.AddModelError("AccountName", apiResponse);
-                            ViewBag.accountTypes = model.LoadAccountTypes();
+                            url += "/AccountsApi/PostAccount";
+                            var myContent = JsonConvert.SerializeObject(entity);
+                            var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
+                            var byteContent = new ByteArrayContent(buffer);
+                            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                            HttpResponseMessage result = await httpClient.PostAsync(url, byteContent);
+                            if (result.IsSuccessStatusCode)
+                            {
+                                response = result.StatusCode.ToString();
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                string apiResponse = await result.Content.ReadAsStringAsync();
+                                ModelState.AddModelError(string.Empty, apiResponse);
+                                //ModelState.ClearValidationState("AccountName");
+                                //ModelState.AddModelError("AccountName", apiResponse);
+                                ViewBag.accountTypes = model.LoadAccountTypes();
+                            }
                         }
                     }
                 }
