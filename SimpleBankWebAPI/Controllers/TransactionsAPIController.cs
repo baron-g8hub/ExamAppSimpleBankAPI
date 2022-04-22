@@ -106,8 +106,8 @@ namespace SimpleBankWebAPI.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var sourceAccount = _repository.Accounts.GetByAccountNumber(transaction.AccountNumber);
-                    var recepientAccount = _repository.Accounts.GetByAccountNumber(transaction.DestinationAccount);
+                    var sourceAccount = await _repository.Accounts.GetByAccountNumberAsync(transaction.AccountNumber);
+                    var recepientAccount = await _repository.Accounts.GetByAccountNumberAsync(transaction.DestinationAccount);
 
                     //NOTED: take - 50 from Account
                     var available = sourceAccount.SavingsBalance;
@@ -124,10 +124,10 @@ namespace SimpleBankWebAPI.Controllers
                     //_repository.Accounts.Save();
 
                     transaction.PostingDate = DateTime.UtcNow;
-                    transaction.Description = "Send money to: " + recepientAccount.AccountNumber + " | " + recepientAccount.AccountName;
+                    transaction.Description = "Transfered: " + transaction.Amount + " to " + recepientAccount.AccountNumber + " | " + recepientAccount.AccountName;
                     transaction.RunningBalance = remaining;
-                    _repository.PostedTransactions.AddTransaction(transaction);
-                    _repository.PostedTransactions.Save();
+                    await _repository.PostedTransactions.AddTransactionAsync(transaction);
+                    await _repository.SaveAsync();
 
                     return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
                 }
