@@ -115,9 +115,8 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<string>("RunningBalance")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<decimal?>("RunningBalance")
+                      .HasColumnType("money");
 
                     b.Property<int?>("TransactionTypeId")
                         .HasColumnType("int")

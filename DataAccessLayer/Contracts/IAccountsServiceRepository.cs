@@ -8,6 +8,7 @@ namespace DataAccessLayer.Contracts
         IQueryable<Account> GetAllAccounts();
         Task<ICollection<Account>> GetAllAccountsAsync();
         Account GetAccountById(string id);
+        Account GetByAccountNumber(string? id);
         Task<Account> GetAccountByIdAsync(string id);
         Task<Account> GetByAccountNumberAsync(string? number);
         

@@ -10,7 +10,8 @@ namespace DataAccessLayer.Contracts
         Task<ICollection<PostedTransaction>> GetAllAsync();
         PostedTransaction GetById(int Id);
         Task<PostedTransaction> GetByIdAsync(int? Id);
-        Task AddAsync(PostedTransaction entity);
+        void AddTransaction(PostedTransaction entity);
+        Task AddTransactionAsync(PostedTransaction entity);
         void Save();
         Task<int> SaveAsync(CancellationToken cancellationtoken);
       // Task<int> PostTransactionAsync(CancellationToken ct, PostingTransactionWrapper wrapper);

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using DataAccessLayer.Contracts;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace SimpleBankWebAPI.Controllers
 {
@@ -30,7 +30,8 @@ namespace SimpleBankWebAPI.Controllers
         public async Task<ActionResult<IEnumerable<PostedTransaction>>> Get()
         {
             var list = await _repository.PostedTransactions.GetAllAsync();
-            return Ok(list);
+            var orderedList = list.OrderByDescending(x => x.PostingDate).ToList();
+            return Ok(orderedList);
         }
 
 
@@ -98,43 +99,54 @@ namespace SimpleBankWebAPI.Controllers
             try
             {
                 _cts = new CancellationTokenSource();
-                // send a cancel after 4000 ms or call cts.Cancel();
                 //_cts.CancelAfter(4000);
+
+                //Fetch the Token
                 CancellationToken ct = _cts.Token;
+
                 if (ModelState.IsValid)
                 {
+                    var sourceAccount = _repository.Accounts.GetByAccountNumber(transaction.AccountNumber);
+                    var recepientAccount = _repository.Accounts.GetByAccountNumber(transaction.DestinationAccount);
+
                     //NOTED: take - 50 from Account
-                    var sourceAccount = new Account();
-                    sourceAccount = await _repository.Accounts.GetByAccountNumberAsync (transaction.AccountNumber);
                     var available = sourceAccount.SavingsBalance;
-                    sourceAccount.SavingsBalance = (available - transaction.Amount);
-                    _repository.Accounts.UpdateAccount(sourceAccount);
+                    var remaining = (available - transaction.Amount);
+                    sourceAccount.SavingsBalance = remaining;
+                    //_repository.Accounts.UpdateAccount(sourceAccount);
+                    //_repository.Accounts.Save();
 
                     //NOTED: put + 50 to Account
-                    var recepientAccount = new Account();
-                    recepientAccount = await _repository.Accounts.GetByAccountNumberAsync(transaction.DestinationAccount);
-                    var current = sourceAccount.SavingsBalance;
-                    sourceAccount.SavingsBalance = (current + transaction.Amount);
-                    _repository.Accounts.UpdateAccount(recepientAccount);
+                    var current = recepientAccount.SavingsBalance;
+                    var balance = (current + transaction.Amount);
+                    recepientAccount.SavingsBalance = balance;
+                    //_repository.Accounts.UpdateAccount(recepientAccount);
+                    //_repository.Accounts.Save();
 
-                    await _repository.PostedTransactions.AddAsync(transaction);
-                    await _repository.PostedTransactions.SaveAsync(ct);
-
-
-
+                    transaction.PostingDate = DateTime.UtcNow;
+                    transaction.Description = "Send money to: " + recepientAccount.AccountNumber + " | " + recepientAccount.AccountName;
+                    transaction.RunningBalance = remaining;
+                    _repository.PostedTransactions.AddTransaction(transaction);
+                    _repository.PostedTransactions.Save();
 
                     return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
                 }
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                return this.StatusCode(400, ex.Message);
+                ModelState.AddModelError(string.Empty, ex.Message.ToString());
+                return BadRequest();
+            }
+            catch (DbUpdateException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message.ToString());
+                return BadRequest();
             }
             finally
             {
-
+                _cts.Dispose();
             }
-            return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
+            return NoContent();
         }
 
 

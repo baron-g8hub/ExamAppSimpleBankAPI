@@ -20,12 +20,15 @@ namespace DataAccessLayer.Models
         [StringLength(150)]
         public string? Description { get; set; }
         public int? AccountType { get; set; }
+
         [Column(TypeName = "money")]
         public decimal? Amount { get; set; }
         [StringLength(50)]
         public string? DestinationAccount { get; set; }
-        [StringLength(10)]
-        public string? RunningBalance { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? RunningBalance { get; set; }
+
         [Column("TransactionType_ID")]
         public int? TransactionTypeId { get; set; }
 

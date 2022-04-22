@@ -44,7 +44,8 @@ namespace DataAccessLayer.Migrations
             //        AccountType = table.Column<int>(type: "int", nullable: true),
             //        Amount = table.Column<decimal>(type: "money", nullable: true),
             //        DestinationAccount = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-            //        RunningBalance = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+
+            //  RunningBalance = table.Column<decimal>(type: "money", nullable: true),
             //        TransactionType_ID = table.Column<int>(type: "int", nullable: true),
             //        RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
             //    },

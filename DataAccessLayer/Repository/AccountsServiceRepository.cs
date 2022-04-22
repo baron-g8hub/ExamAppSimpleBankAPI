@@ -13,9 +13,9 @@ namespace DataAccessLayer.Repository
     {
         public AccountsServiceRepository(ApplicationDBContext context) : base(context)
         {
-          
+
         }
-       
+
         public IQueryable<Account> GetAllAccounts()
         {
             return _context.Set<Account>();
@@ -37,8 +37,12 @@ namespace DataAccessLayer.Repository
         {
             return _context.Accounts.Find(id);
         }
+        public virtual Account GetByAccountNumber(string? id)
+        {
+            return _context.Accounts.FirstOrDefault(x => x.AccountNumber == id);
+        }
 
-        public async Task<Account> GetAccountByIdAsync(string id)
+        public virtual async Task<Account> GetAccountByIdAsync(string id)
         {
             return await _context.Accounts.FindAsync(id);
         }
@@ -49,7 +53,7 @@ namespace DataAccessLayer.Repository
             Account entity = list.FirstOrDefault(x => x.AccountNumber == number);
             return entity;
         }
-     
+
         public virtual void Add(Account entity)
         {
             if (entity != null)
@@ -76,7 +80,7 @@ namespace DataAccessLayer.Repository
             }
         }
 
-        public virtual void UpdateAccount(Account entity)
+        public virtual  void UpdateAccount(Account entity)
         {
             if (entity == null)
             {
@@ -157,7 +161,7 @@ namespace DataAccessLayer.Repository
                 tx.Rollback();
                 throw s;
             }
-          //  return records;
+            //  return records;
         }
         public virtual void Delete(string id)
         {
@@ -246,8 +250,6 @@ namespace DataAccessLayer.Repository
             ShowEntityState(_context);
         }
 
-     
 
-      
     }
 }

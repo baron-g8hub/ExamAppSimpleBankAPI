@@ -8,7 +8,7 @@
 <hr />
 
 <div class="table-responsive">
-    <table class="table table-sm table-bordered">
+    <table class="table align-middle table-sm">
         <thead class="table-light">
             <tr>
                 <th>
@@ -30,7 +30,7 @@
                     Description
                 </th>
                 <th style="text-align: center;">
-                    Available Balance
+                    Running Balance
                 </th>
                 <th></th>
             </tr>
@@ -49,18 +49,16 @@
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @*@Utility.HandleAmountString(item.Amount.ToString())*@
-                        @item.Amount
+                        @Utility.HandleAmountFormat(item.Amount.ToString())
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DestinationAccount)
                     </td>
-                    <td>
+                    <td style="font-size: small;">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @*@Utility.HandleAmountString(item.RunningBalance.ToString())*@
-                        @item.RunningBalance
+                        @Utility.HandleAmountFormat(item.RunningBalance.ToString())
                     </td>
                     <td scope="row" style="text-align: center;">
                         <form asp-route-id="@item.TransactionId" method="post">

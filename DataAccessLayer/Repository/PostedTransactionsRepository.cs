@@ -14,7 +14,7 @@ namespace DataAccessLayer.Repository
     {
         public PostedTransactionsRepository(ApplicationDBContext context) : base(context)
         {
-           
+
         }
 
         public IQueryable<PostedTransaction> SelectAll()
@@ -50,18 +50,19 @@ namespace DataAccessLayer.Repository
             return _context.PostedTransactions.Find(id);
         }
 
-     
-       
-
-        public void Update(Account entity)
+        public virtual void AddTransaction(PostedTransaction entity)
         {
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                _context.PostedTransactions.Add(entity);
+            }
         }
-        public async Task AddAsync(PostedTransaction entity)
+   
+        public virtual async Task AddTransactionAsync(PostedTransaction entity)
         {
             if (entity == null)
             {
-                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+                throw new ArgumentNullException($"{nameof(AddTransactionAsync)} entity must not be null");
             }
             try
             {
@@ -156,9 +157,6 @@ namespace DataAccessLayer.Repository
             }
             this.disposed = true;
         }
-
-
-
 
 
     }
