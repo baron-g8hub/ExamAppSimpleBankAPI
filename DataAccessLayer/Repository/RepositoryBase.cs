@@ -1,9 +1,9 @@
 ﻿using DataAccessLayer.DataContextEFCore;
 using Microsoft.EntityFrameworkCore;
-using SimpleBankWebAPI.Contracts;
+using DataAccessLayer.Contracts;
 using System.Linq.Expressions;
 
-namespace SimpleBankWebAPI.Repository
+namespace DataAccessLayer.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {

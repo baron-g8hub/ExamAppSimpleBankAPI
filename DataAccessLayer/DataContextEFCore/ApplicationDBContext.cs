@@ -7,7 +7,7 @@ namespace DataAccessLayer.DataContextEFCore
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-
+           
         }
 
         public DbSet<Account> Accounts { get; set; }

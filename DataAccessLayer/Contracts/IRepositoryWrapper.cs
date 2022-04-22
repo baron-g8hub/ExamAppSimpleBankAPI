@@ -1,4 +1,4 @@
-﻿namespace SimpleBankWebAPI.Contracts
+﻿namespace DataAccessLayer.Contracts
 {
     public interface IRepositoryWrapper
     {

@@ -1,10 +1,10 @@
 ﻿using DataAccessLayer.DataContextEFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SimpleBankWebAPI.Contracts;
+using DataAccessLayer.Contracts;
 
 
-namespace SimpleBankWebAPI.Repository
+namespace DataAccessLayer.Repository
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {

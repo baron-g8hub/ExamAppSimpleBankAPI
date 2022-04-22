@@ -1,8 +1,8 @@
 ﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.ViewModels;
+using DataAccessLayer.Contracts;
+
 
 namespace SimpleBankWebAPI.Controllers
 {

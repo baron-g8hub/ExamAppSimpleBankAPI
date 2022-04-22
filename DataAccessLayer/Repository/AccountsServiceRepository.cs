@@ -4,10 +4,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
-using SimpleBankWebAPI.Contracts;
+using DataAccessLayer.Contracts;
 
 
-namespace SimpleBankWebAPI.Repository
+namespace DataAccessLayer.Repository
 {
     public class AccountsServiceRepository : RepositoryBase<Account>, IAccountsServiceRepository
     {

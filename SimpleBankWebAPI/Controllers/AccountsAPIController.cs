@@ -1,10 +1,11 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer.Contracts;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using SimpleBankWebAPI.Contracts;
+
 
 
 namespace SimpleBankWebAPI.Controllers

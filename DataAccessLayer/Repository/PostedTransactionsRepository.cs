@@ -5,11 +5,10 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
-using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.ViewModels;
+using DataAccessLayer.Contracts;
 using System.Transactions;
 
-namespace SimpleBankWebAPI.Repository
+namespace DataAccessLayer.Repository
 {
     public class PostedTransactionsRepository : RepositoryBase<PostedTransaction>, IPostedTransactionsRepository
     {

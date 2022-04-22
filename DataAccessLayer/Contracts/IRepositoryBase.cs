@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace SimpleBankWebAPI.Contracts
+namespace DataAccessLayer.Contracts
 {
     public interface IRepositoryBase<T>
     {

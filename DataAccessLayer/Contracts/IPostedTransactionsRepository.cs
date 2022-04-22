@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer.Models;
-using SimpleBankWebAPI.ViewModels;
 
-namespace SimpleBankWebAPI.Contracts
+
+namespace DataAccessLayer.Contracts
 {
     public interface IPostedTransactionsRepository : IRepositoryBase<PostedTransaction>
     {

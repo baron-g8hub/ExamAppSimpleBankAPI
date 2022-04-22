@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
-using SimpleBankWebAPI.Contracts;
-using SimpleBankWebAPI.Repository;
+using DataAccessLayer.Contracts;
+using DataAccessLayer.Repository;
 using DataAccessLayer.DataContextEFCore;
 
 var builder = WebApplication.CreateBuilder(args);

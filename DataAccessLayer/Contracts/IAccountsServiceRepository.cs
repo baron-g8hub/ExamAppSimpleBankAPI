@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer.Models;
 
 
-namespace SimpleBankWebAPI.Contracts
+namespace DataAccessLayer.Contracts
 {
     public interface IAccountsServiceRepository : IRepositoryBase<Account>
     {
