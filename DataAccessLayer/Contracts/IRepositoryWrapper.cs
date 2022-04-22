@@ -3,9 +3,10 @@
     public interface IRepositoryWrapper
     {
         IAccountsServiceRepository Accounts { get; }
-        IPostedTransactionsRepository  PostedTransactions  { get; }
+        IPostedTransactionsRepository PostedTransactions { get; }
 
-        Task<int> SaveAsync(CancellationToken ct);
+
         Task SaveAsync();
+        Task<int> SaveAsync(CancellationToken ct);
     }
 }

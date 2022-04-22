@@ -9,7 +9,6 @@ namespace DataAccessLayer.Repository
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-
         private ApplicationDBContext _repoContext;
         private IAccountsServiceRepository _account;
         private IPostedTransactionsRepository _transaction;
@@ -102,5 +101,7 @@ namespace DataAccessLayer.Repository
             }
             //  return records;
         }
+
+      
     }
 }

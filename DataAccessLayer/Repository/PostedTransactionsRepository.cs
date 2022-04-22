@@ -49,7 +49,6 @@ namespace DataAccessLayer.Repository
         {
             return _context.PostedTransactions.Find(id);
         }
-
         public virtual void AddTransaction(PostedTransaction entity)
         {
             if (entity != null)
@@ -57,7 +56,6 @@ namespace DataAccessLayer.Repository
                 _context.PostedTransactions.Add(entity);
             }
         }
-   
         public virtual async Task AddTransactionAsync(PostedTransaction entity)
         {
             if (entity == null)
@@ -75,61 +73,6 @@ namespace DataAccessLayer.Repository
             {
                 throw new Exception($"{nameof(entity)} could not be saved: {ex.Message}");
             }
-        }
-        public virtual void Save()
-        {
-            _context.SaveChanges();
-        }
-        public virtual async Task<int> SaveAsync(CancellationToken ct)
-        {
-            int records = 0;
-            IDbContextTransaction tx = null;
-            //await Task.Delay(5000);
-            if (ct.IsCancellationRequested)
-            {
-                ct.ThrowIfCancellationRequested();
-            }
-            try
-            {
-                using (tx = await _context.Database.BeginTransactionAsync())
-                {
-                    records = await _context.SaveChangesAsync();
-                    await tx.CommitAsync();
-                    return records;
-                }
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                foreach (var entry in ex.Entries)
-                {
-                    if (entry.Entity is Account)
-                    {
-                        var proposedValues = entry.CurrentValues;
-                        var databaseValues = entry.GetDatabaseValues();
-
-                        foreach (var property in proposedValues.Properties)
-                        {
-                            var proposedValue = proposedValues[property];
-                            var databaseValue = databaseValues[property];
-                        }
-
-                        // Refresh original values to bypass next concurrency check
-                        entry.OriginalValues.SetValues(databaseValues);
-                    }
-                    else
-                    {
-                        throw new NotSupportedException("Unable to save changes. The book details was updated by another user. " + entry.Metadata.Name);
-                    }
-                }
-                throw ex;
-            }
-            catch (DbUpdateException ex)
-            {
-                SqlException s = ex.InnerException as SqlException;
-                var errorMessage = $"{ex.Message}" + " {ex?.InnerException.Message}" + " rolling back…";
-                tx.Rollback();
-            }
-            return records;
         }
         public static void ShowEntityState(ApplicationDBContext context)
         {
@@ -157,7 +100,5 @@ namespace DataAccessLayer.Repository
             }
             this.disposed = true;
         }
-
-
     }
 }

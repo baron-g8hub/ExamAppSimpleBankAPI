@@ -44,7 +44,7 @@ namespace SimpleBankWebAPI.Controllers
             return account;
         }
 
-      
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(string id, Account account)
         {
@@ -69,7 +69,7 @@ namespace SimpleBankWebAPI.Controllers
             _repository.Accounts.UpdateAccount(entity);
             try
             {
-                await _repository.Accounts.SaveAsync(ct);
+                await _repository.SaveAsync(ct);
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -97,8 +97,8 @@ namespace SimpleBankWebAPI.Controllers
 
 
 
-     
-        
+
+
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
@@ -115,12 +115,12 @@ namespace SimpleBankWebAPI.Controllers
                 account.UpdatedBy = "Admin";
                 account.AccountType = 1;
                 await _repository.Accounts.AddAsync(account);
-                int ret = await _repository.Accounts.SaveAsync(ct);
+                int ret = await _repository.SaveAsync(ct);
                 if (ret == 1)
                 {
                     account.AccountNumber = account.AccountId.ToString();
                     _repository.Accounts.UpdateAccount(account);
-                    await _repository.Accounts.SaveAsync(ct);
+                    await _repository.SaveAsync(ct);
                 }
                 return CreatedAtAction("GetAccount", new { id = account.AccountName }, account);
             }
@@ -142,7 +142,7 @@ namespace SimpleBankWebAPI.Controllers
                 CancellationToken ct = _cts.Token;
                 var entity = await _repository.Accounts.GetByAccountNumberAsync(number);
                 _repository.Accounts.Delete(entity.AccountName);
-                await _repository.Accounts.SaveAsync(ct);
+                await _repository.SaveAsync(ct);
                 var result = "Account deleted successfully.";
                 if (!AccountExists(number))
                 {
@@ -171,7 +171,7 @@ namespace SimpleBankWebAPI.Controllers
 
                 var entity = await _repository.Accounts.GetAccountByIdAsync(name);
                 _repository.Accounts.Delete(entity.AccountName);
-                await _repository.Accounts.SaveAsync(ct);
+                await _repository.SaveAsync(ct);
                 var result = "Account deleted successfully.";
                 if (!AccountExists(name))
                 {

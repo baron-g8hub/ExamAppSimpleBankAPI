@@ -16,8 +16,8 @@ namespace DataAccessLayer.Contracts
         Task AddAsync(Account Entity);
         void UpdateAccount(Account Entity);
         void Delete(string id);
-        void Save();
-        Task<int> SaveAsync(CancellationToken cancellationtoken);
+        
+      
         void TakeMoneyFromAccount(Account entity, decimal? deduction);
         void SendMoneyToAccount(Account entity, decimal? amount);
 
