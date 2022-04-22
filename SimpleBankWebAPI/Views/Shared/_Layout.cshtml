@@ -13,6 +13,30 @@
 </head>
 <body>
     <header>
+        <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3" aria-label="Tenth navbar example" style="background-color: navy;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a style="color: #ced4da;" class="nav-link" asp-area="" asp-controller="Accounts" asp-action="Index"><i class="fa fa-users-rectangle"></i> Accounts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="color: #ced4da;" class="nav-link" asp-area="" asp-controller="Transactions" asp-action="Index"><i class="fa fa-list-alt"></i> Transactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a style="color: #ced4da;" class="nav-link" href="~/swagger/index.html"><i class="fa fa-address-card"></i> SwaggerUI</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <header hidden>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: lemonchiffon;">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SimpleBankAPI</a>

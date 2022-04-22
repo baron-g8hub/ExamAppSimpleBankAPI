@@ -5,11 +5,10 @@
 }
 
 <h4>Fund Transfer Transactions</h4>
-<hr />
 
-<div class="table-responsive">
+<div class="table-responsive border border-dark">
     <table class="table align-middle table-sm">
-        <thead class="table-light">
+        <thead>
             <tr>
                 <th>
                     Reference #.
@@ -48,7 +47,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
-                    <td scope="row" style="text-align: right;">
+                    <td scope="row" style="text-align: right; font-family:monospace;">
                         @Utility.HandleAmountFormat(item.Amount.ToString())
                     </td>
                     <td>
@@ -57,12 +56,12 @@
                     <td style="font-size: small;">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
-                    <td scope="row" style="text-align: right;">
+                    <td scope="row" style="text-align: right; font-family:monospace;">
                         @Utility.HandleAmountFormat(item.RunningBalance.ToString())
                     </td>
                     <td scope="row" style="text-align: center;">
                         <form asp-route-id="@item.TransactionId" method="post">
-                            <a class="btn btn-sm btn-outline-primary" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.TransactionId">
+                            <a class="btn btn-sm btn-outline-success asp-controller="Transactions" asp-action="Details" asp-route-id="@item.TransactionId">
                                 <i class="fas fa-info-circle"></i>
                             </a>
                         </form>

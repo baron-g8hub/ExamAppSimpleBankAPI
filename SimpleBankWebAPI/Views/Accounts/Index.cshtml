@@ -39,26 +39,33 @@
 }
 
 
-<h4>List of Accounts</h4>
-<hr />
+<nav class="navbar">
+    <div class="container-fluid container-sm">
+        <ul class="nav navbar-nav">
+            <li class="active">
+                <h4>List of Accounts</h4>
+            </li>
+        </ul>
+        <ul class="nav navbar-right">
+            <li class="nav-item">
+                <a class="btn btn-sm btn-success" asp-controller="Accounts" asp-action="CreateAccount">
+                    <i class="fas fa-circle-plus"></i>
+                    Account
+                </a>
+            </li>
+            <li class="nav-item" style="padding-top: 0px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
+                <a class="btn btn-success btn-sm" asp-controller="Transactions" asp-action="Transfer">
+                    <i class="fas fa-copy"></i>
+                    Transfer
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<ul class="nav">
-    <li class="nav-item">
-        <a class="btn btn-primary btn-sm" asp-controller="Accounts" asp-action="CreateAccount">
-            <i class="fas fa-circle-plus"></i>
-            Account
-        </a>
-    </li>
-    <li class="nav-item" style="padding-top: 0px; padding-right: 5px; padding-bottom: 10px; padding-left: 5px;">
-        <a class="btn btn-primary btn-sm" asp-controller="Transactions" asp-action="Transfer">
-            <i class="fas fa-copy"></i>
-            Transfer
-        </a>
-    </li>
-</ul>
-<div class="table-responsive">
-    <table class="table align-middle  table-sm">
-        <thead class="table-light">
+<div class="table-responsive border border-dark">
+    <table class="table align-middle table-sm">
+        <thead>
             <tr>
                 <th scope="col">
                     Account ID
@@ -88,12 +95,12 @@
                     <td scope="row">
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
-                    <td scope="row" style="text-align: right;">
+                    <td scope="row" style="text-align: right; font-family:monospace;">
                         @Utility.HandleAmountFormat(item.SavingsBalance.ToString())
                     </td>
                     <td scope="row" style="text-align: center;">
                         <form asp-route-id="@item.AccountId" method="post">
-                            <a class="btn btn-sm btn-outline-primary" asp-controller="Accounts" asp-action="CreateAccount" asp-route-id="@item.AccountName">
+                            <a class="btn btn-sm btn-outline-success asp-controller="Accounts" asp-action="CreateAccount" asp-route-id="@item.AccountName">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </form>

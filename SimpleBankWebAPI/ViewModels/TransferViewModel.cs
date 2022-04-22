@@ -26,7 +26,7 @@ namespace SimpleBankWebAPI
 
         [Required]
         [Display(Name = "Amount")]
-        [DataType(DataType.Currency)]
+        [Range(0, double.MaxValue, ErrorMessage = "Please enter valid amount.")]
         public double Amount { get; set; }
 
         [Required]
