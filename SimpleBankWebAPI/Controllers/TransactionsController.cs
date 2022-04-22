@@ -31,7 +31,8 @@ namespace SimpleBankWebAPI.Controllers
                     using (var response = await httpClient.GetAsync(url + "/TransactionsAPI/Get"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        vm.EntityList = JsonConvert.DeserializeObject<List<PostedTransaction>>(apiResponse);
+                        var transactions = JsonConvert.DeserializeObject<List<PostedTransaction>>(apiResponse);
+                        vm.EntityList = transactions;
                     }
                 }
                 return View(vm);
