@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -66,8 +66,8 @@ namespace SimpleBankWebAPI.Controllers
                         entity = JsonConvert.DeserializeObject<Account>(apiResponse);
                         vm.AccountId = entity.AccountId;
                         vm.AccountName = entity.AccountName;
-                        vm.AccountType = entity.AccountType;
-                        vm.SavingsBalance = entity.SavingsBalance;
+                        vm.AccountType = 1;
+                        vm.SavingsBalance = Convert.ToDouble(entity.SavingsBalance);
                         vm.RowVersion = entity.RowVersion;
                     }
                 }
@@ -88,8 +88,8 @@ namespace SimpleBankWebAPI.Controllers
                     var entity = new Account();
                     entity.AccountName = model.AccountName.Trim();
                     entity.AccountType = model.AccountType;
-                    entity.SavingsBalance = model.SavingsBalance;
-                    entity.AccountType_ID = model.AccountType;
+                    entity.SavingsBalance = Convert.ToDecimal(model.SavingsBalance);
+                    entity.AccountType = model.AccountType;
                     var response = string.Empty;
                     using (var httpClient = new HttpClient())
                     {

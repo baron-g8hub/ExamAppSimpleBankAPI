@@ -154,12 +154,12 @@ namespace SimpleBankWebAPI.Repository
             }
             catch (DbUpdateException ex)
             {
-                SqlException s = ex.InnerException as SqlException;
+                SqlException? s = ex.InnerException as SqlException;
                 var errorMessage = $"{ex.Message}" + " {ex?.InnerException.Message}" + " rolling back…";
                 tx.Rollback();
                 throw s;
             }
-            return records;
+          //  return records;
         }
         public virtual void Delete(string id)
         {
@@ -215,12 +215,9 @@ namespace SimpleBankWebAPI.Repository
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.AccountName).IsModified = false;
             _context.Entry(entity).Property(x => x.AccountType).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.AccountNumber).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.AccountNumber).IsModified = false;
             _context.Entry(entity).Property(x => x.CheckingBalance).IsModified = false;
             _context.Entry(entity).Property(x => x.CreditBalance).IsModified = false;
             _context.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.CreatedBy).IsModified = false;
             ShowEntityState(_context);
         }
         public virtual void SendMoneyToAccount(Account entity, decimal? amount)
@@ -245,12 +242,9 @@ namespace SimpleBankWebAPI.Repository
             _context.Entry(entity).State = EntityState.Modified;
             _context.Entry(entity).Property(x => x.AccountName).IsModified = false;
             _context.Entry(entity).Property(x => x.AccountType).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.AccountNumber).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.AccountNumber).IsModified = false;
             _context.Entry(entity).Property(x => x.CheckingBalance).IsModified = false;
             _context.Entry(entity).Property(x => x.CreditBalance).IsModified = false;
             _context.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
-            _context.Entry(entity).Property<string>(x => x.CreatedBy).IsModified = false;
             ShowEntityState(_context);
         }
 

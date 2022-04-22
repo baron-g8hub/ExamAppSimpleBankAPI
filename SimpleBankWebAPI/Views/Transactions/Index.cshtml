@@ -50,7 +50,7 @@
                     </td>
                     <td scope="row" style="text-align: right;">
                         @*@Utility.HandleAmountString(item.Amount.ToString())*@
-                        @Utility.HandleAmountFormat(item.Amount)
+                        @item.Amount
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DestinationAccount)
@@ -60,11 +60,11 @@
                     </td>
                     <td scope="row" style="text-align: right;">
                         @*@Utility.HandleAmountString(item.RunningBalance.ToString())*@
-                        @Utility.HandleAmountFormat(item.RunningBalance)
+                        @item.RunningBalance
                     </td>
                     <td scope="row" style="text-align: center;">
-                        <form asp-route-id="@item.Transaction_ID" method="post">
-                            <a class="btn btn-sm btn-outline-primary" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.Transaction_ID">
+                        <form asp-route-id="@item.TransactionId" method="post">
+                            <a class="btn btn-sm btn-outline-primary" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.TransactionId">
                                 <i class="fas fa-info-circle"></i>
                             </a>
                         </form>

@@ -26,6 +26,12 @@ namespace Utility
             return ret;
         }
 
+        public static string HandleAmountFormat(string? amountStr)
+        {
+            double.TryParse(amountStr, out double result);
+            string ret = result.ToString("N2");
+            return ret;
+        }
 
         public static string FormatPriceString(string price)
         {

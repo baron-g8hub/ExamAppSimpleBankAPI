@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using DataAccessLayer.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SimpleBankWebAPI
@@ -8,13 +8,13 @@ namespace SimpleBankWebAPI
 
         public TransferViewModel()
         {
-            Entity = new Transaction();
-            EntityList = new List<Transaction>();
+            Entity = new PostedTransaction();
+            EntityList = new List<PostedTransaction>();
         }
 
-        public Transaction Entity { get; set; }
+        public PostedTransaction Entity { get; set; }
 
-        public List<Transaction> EntityList { get; set; }
+        public List<PostedTransaction> EntityList { get; set; }
 
         [Required]
         [Display(Name = "Source Account")]

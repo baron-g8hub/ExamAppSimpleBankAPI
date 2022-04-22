@@ -1,5 +1,4 @@
-﻿using BusinessLogicLayer;
-using DataAccessLayer.Models;
+﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;

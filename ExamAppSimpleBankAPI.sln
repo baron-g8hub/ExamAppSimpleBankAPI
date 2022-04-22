@@ -5,16 +5,12 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonLibrary", "CommonLibrary", "{C2632666-334A-4FE0-B692-08DCEA7D55D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{456B7BE0-307E-49B7-91D4-E6FF178B2339}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBankWebAPI", "SimpleBankWebAPI\SimpleBankWebAPI.csproj", "{FD097FF9-835D-4612-B724-75E175ADF3E6}"
 EndProject
@@ -28,18 +24,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD097FF9-835D-4612-B724-75E175ADF3E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD097FF9-835D-4612-B724-75E175ADF3E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD097FF9-835D-4612-B724-75E175ADF3E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,9 +45,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{9E48E63D-2F2D-4586-8EB3-7F6EEC2B6C98} = {C2632666-334A-4FE0-B692-08DCEA7D55D2}
 		{B8D4B7DB-3E81-4D49-80C4-665AC165A0F4} = {C2632666-334A-4FE0-B692-08DCEA7D55D2}
-		{3AE58669-4DCC-476D-B7A5-1A4B04F8EE29} = {C2632666-334A-4FE0-B692-08DCEA7D55D2}
 		{6517197E-5006-4DC5-B492-4DB13282469E} = {C2632666-334A-4FE0-B692-08DCEA7D55D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

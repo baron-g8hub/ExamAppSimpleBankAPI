@@ -1,5 +1,4 @@
-﻿using BusinessLogicLayer;
-using DataAccessLayer.Models;
+﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SimpleBankWebAPI.Contracts;

@@ -1,5 +1,4 @@
-﻿using BusinessLogicLayer;
-using Entities;
+﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,8 +6,6 @@ namespace SimpleBankWebAPI
 {
     public class AccountsViewModel
     {
-        public AccountsManager _repo;
-
         public AccountsViewModel()
         {
             EntityList = new List<Account>();

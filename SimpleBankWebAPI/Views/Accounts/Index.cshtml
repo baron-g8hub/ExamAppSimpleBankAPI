@@ -61,7 +61,7 @@
         <thead class="table-light">
             <tr>
                 <th scope="col">
-                 Account ID
+                    Account ID
                 </th>
                 <th scope="col">
                     @Html.DisplayNameFor(model => model.AccountName)
@@ -71,12 +71,6 @@
                 </th>
                 <th scope="col" style="text-align: center;">
                     Balance
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.IsActive)
-                </th>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.AccountType)
                 </th>
                 <th></th>
             </tr>
@@ -95,13 +89,7 @@
                         @Html.DisplayFor(modelItem => item.AccountNumber)
                     </td>
                     <td scope="row" style="text-align: right;">
-                        @Utility.HandleAmountFormat(item.SavingsBalance)
-                    </td>
-                    <td scope="row">
-                        @Html.DisplayFor(modelItem => item.IsActive)
-                    </td>
-                    <td scope="row">
-                        @Html.DisplayFor(modelItem => item.AccountTypeName)
+                        @Utility.HandleAmountFormat(item.SavingsBalance.ToString())
                     </td>
                     <td scope="row" style="text-align: center;">
                         <form asp-route-id="@item.AccountId" method="post">

@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -19,7 +19,7 @@ namespace SimpleBankWebAPI.Controllers
             try
             {
                 var vm = new TransferViewModel();
-                var list = new List<Transaction>();
+                var list = new List<PostedTransaction>();
                 using (var httpClient = new HttpClient())
                 {
                     var url = "http://" + HttpContext.Request.Host.Value;
@@ -31,7 +31,7 @@ namespace SimpleBankWebAPI.Controllers
                     using (var response = await httpClient.GetAsync(url + "/TransactionsAPI/Get"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        vm.EntityList = JsonConvert.DeserializeObject<List<Transaction>>(apiResponse);
+                        vm.EntityList = JsonConvert.DeserializeObject<List<PostedTransaction>>(apiResponse);
                     }
                 }
                 return View(vm);
@@ -45,7 +45,7 @@ namespace SimpleBankWebAPI.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var vm = new TransferViewModel();
-            var entity = new Transaction();
+            var entity = new PostedTransaction();
 
             if (id == 0)
             {
@@ -61,7 +61,7 @@ namespace SimpleBankWebAPI.Controllers
                 using (var response = await httpClient.GetAsync(url + "/TransactionsAPI/Get/" + id.ToString()))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    entity= JsonConvert.DeserializeObject<Transaction>(apiResponse);
+                    entity= JsonConvert.DeserializeObject<PostedTransaction>(apiResponse);
                 }
             }
             vm.Entity = entity;
@@ -79,9 +79,9 @@ namespace SimpleBankWebAPI.Controllers
         {
             try
             {
-                var entity = new Transaction();
+                var entity = new PostedTransaction();
                 entity.AccountNumber = model.SourceAccount;
-                entity.Amount = model.Amount;
+                entity.Amount = Convert.ToDecimal(model.Amount);
                 entity.DestinationAccount = model.DestinationAccount;
 
                 var myContent = JsonConvert.SerializeObject(entity);
