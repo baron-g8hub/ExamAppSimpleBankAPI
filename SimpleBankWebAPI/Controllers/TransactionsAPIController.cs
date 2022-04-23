@@ -89,14 +89,11 @@ namespace SimpleBankWebAPI.Controllers
                 transaction.Description = "Transfered: " + transaction.Amount + " to " + recepientAccount.AccountNumber + " | " + recepientAccount.AccountName;
                 transaction.RunningBalance = remaining;
                 await _repository.PostedTransactions.AddTransactionAsync(transaction);
-                //var retmessage = await _repository.SaveTransactionAsync(ct);
+                var retmessage = await _repository.SaveTransactionAsync(ct);
 
                 // NOTE: Testing Concurrency throw here when Source Account has been changed from other client.
-                var retmessage = await _repository.UnitTestSaveChangesPostTransactionConcurrency(transaction);
-                if (retmessage)
-                {
-
-                }
+                //var retmessage = await _repository.UnitTestSaveChangesPostTransactionConcurrency(transaction);
+              
                 return CreatedAtAction("Get", new { id = transaction.TransactionId }, transaction);
 
             }
