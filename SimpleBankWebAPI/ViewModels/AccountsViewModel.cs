@@ -12,7 +12,7 @@ namespace SimpleBankWebAPI
             SelectListItems = LoadAccountTypes();
         }
 
-        public List<Account> EntityList { get; set; }
+        public List<Account>? EntityList { get; set; }
         public List<SelectListItem> SelectListItems { get; set; }
 
         public List<SelectListItem> LoadAccountTypes()
@@ -31,7 +31,7 @@ namespace SimpleBankWebAPI
 
         [Required]
         [Display(Name = "Account Name")]
-        public string AccountName { get; set; }
+        public string? AccountName { get; set; }
 
         [Required]
         [Display(Name = "Account Type")]

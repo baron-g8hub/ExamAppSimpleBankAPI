@@ -8,16 +8,21 @@ namespace DataAccessLayer.Models
     [Table("Accounts")]
     public class Account
     {
+        public Account()
+        {
+                
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Account_ID")]
         public int AccountId { get; set; }
 
         [Key]
         [StringLength(150)]
-        public string AccountName { get; set; } = null!;
+        public string AccountName { get; set; } = null!; 
         public int? AccountType { get; set; }
         public string? AccountNumber { get; set; }
-
+        
         [ConcurrencyCheck]
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]

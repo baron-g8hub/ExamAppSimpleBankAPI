@@ -13,7 +13,7 @@ namespace SimpleBankWebAPI
             AccountList = new List<Account> { new Account() };
         }
 
-        public PostedTransaction Entity { get; set; }
+        public PostedTransaction? Entity { get; set; }
 
         public List<Account> AccountList { get; set; }
 
@@ -22,7 +22,7 @@ namespace SimpleBankWebAPI
 
         [Required]
         [Display(Name = "Source Account")]
-        public string SourceAccount { get; set; }
+        public string? SourceAccount { get; set; }
 
         [Required]
         [Display(Name = "Amount")]
@@ -31,7 +31,7 @@ namespace SimpleBankWebAPI
 
         [Required]
         [Display(Name = "Destination Account")]
-        public string DestinationAccount { get; set; }
+        public string? DestinationAccount { get; set; }
 
         public byte[]? RowVersion { get; set; }
     }

@@ -13,7 +13,7 @@ namespace SimpleBankWebAPI.Controllers
         {
             _configuration = configuration;
         }
-       
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -43,11 +43,11 @@ namespace SimpleBankWebAPI.Controllers
                 throw ex;
             }
         }
-      
+
         public async Task<IActionResult> Details(int id)
         {
             var vm = new TransferViewModel();
-            var entity = new PostedTransaction();
+            PostedTransaction? entity = new PostedTransaction();
 
             if (id == 0)
             {
@@ -63,7 +63,7 @@ namespace SimpleBankWebAPI.Controllers
                 using (var response = await httpClient.GetAsync(url + "/TransactionsAPI/Get/" + id.ToString()))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    entity= JsonConvert.DeserializeObject<PostedTransaction>(apiResponse);
+                    entity = JsonConvert.DeserializeObject<PostedTransaction>(apiResponse);
                 }
             }
             vm.Entity = entity;
@@ -75,7 +75,6 @@ namespace SimpleBankWebAPI.Controllers
             try
             {
                 var vm = new TransferViewModel();
-                var list = new List<Account>();
                 var accounts = new List<SelectListItem>()
                 {
                     new SelectListItem { Value = "0", Text = " Select account number " },
@@ -92,11 +91,16 @@ namespace SimpleBankWebAPI.Controllers
                         if (response.IsSuccessStatusCode)
                         {
                             string apiResponse = await response.Content.ReadAsStringAsync();
-                            list = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+                            List<Account>? accountsList = new List<Account>();
+                            accountsList = JsonConvert.DeserializeObject<List<Account>>(apiResponse);
+                            if (accountsList != null)
+                            {
+                                accounts.AddRange(collection: accountsList.Select(x => new SelectListItem { Value = x.AccountId.ToString(), Text = x.AccountName }).ToList());
+                            }
                         }
                     }
                 }
-                accounts.AddRange(list.Select(x => new SelectListItem { Value = x.AccountId.ToString(), Text = x.AccountName }).ToList());
+
 
                 ViewBag.Accounts = accounts.ToArray();
                 return View(vm);

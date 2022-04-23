@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using DataAccessLayer.Models;
+using System.Linq.Expressions;
 
 namespace DataAccessLayer.Contracts
 {
@@ -9,5 +10,6 @@ namespace DataAccessLayer.Contracts
         //void Create(T entity);
         //void Update(T entity);
         //void Delete(T entity);
+        
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace DataAccessLayer.Contracts
+﻿using DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace DataAccessLayer.Contracts
 {
     public interface IRepositoryWrapper
     {
@@ -8,5 +11,6 @@
 
         Task SaveAsync();
         Task<int> SaveAsync(CancellationToken ct);
+        Task<int> SaveTransactionAsync(CancellationToken ct);
     }
 }

@@ -35,7 +35,12 @@ namespace DataAccessLayer.Repository
 
         public virtual Account GetAccountById(string id)
         {
-            return _context.Accounts.Find(id);
+            Account? ret = new Account();
+            if (_context.Accounts == null)
+            {
+               return ret;
+            }
+            return _context.Accounts.Find(id); ;
         }
         public virtual Account GetByAccountNumber(string? id)
         {
@@ -49,9 +54,13 @@ namespace DataAccessLayer.Repository
 
         public virtual async Task<Account> GetByAccountNumberAsync(string? number)
         {
-            var list = await _context.Accounts.ToListAsync();
-            Account entity = list.FirstOrDefault(x => x.AccountNumber == number);
-            return entity;
+            if (_context.Accounts != null)
+            {
+                var list = await _context.Accounts.ToListAsync();
+                list.FirstOrDefault(x => x.AccountNumber == number);
+            }
+            return _context.Accounts.FirstOrDefault(x => x.AccountNumber == number);
+
         }
 
         public virtual void Add(Account entity)
@@ -80,7 +89,7 @@ namespace DataAccessLayer.Repository
             }
         }
 
-        public virtual  void UpdateAccount(Account entity)
+        public virtual void UpdateAccount(Account entity)
         {
             if (entity == null)
             {
@@ -105,8 +114,8 @@ namespace DataAccessLayer.Repository
             }
         }
 
-     
-     
+
+
         public virtual void Delete(string id)
         {
             Account AccountEntity = _context.Accounts.Find(id);

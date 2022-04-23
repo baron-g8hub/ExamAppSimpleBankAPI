@@ -23,7 +23,11 @@ namespace DataAccessLayer.Repository
         }
         public IEnumerable<PostedTransaction> GetAll()
         {
-            return _context.PostedTransactions.ToList();
+            if (_context.PostedTransactions != null)
+            {
+                return _context.PostedTransactions.ToList();
+            }
+            return Enumerable.Empty<PostedTransaction>();
         }
         public virtual async Task<ICollection<PostedTransaction>> GetAllAsync()
         {
@@ -53,7 +57,10 @@ namespace DataAccessLayer.Repository
         {
             if (entity != null)
             {
-                _context.PostedTransactions.Add(entity);
+                if (_context.PostedTransactions !=null)
+                {
+                    _context.PostedTransactions.Add(entity);
+                }
             }
         }
         public virtual async Task AddTransactionAsync(PostedTransaction entity)
@@ -66,7 +73,10 @@ namespace DataAccessLayer.Repository
             {
                 if (entity != null)
                 {
-                    await _context.PostedTransactions.AddAsync(entity);
+                    if ( _context.PostedTransactions != null)
+                    {
+                        await _context.PostedTransactions.AddAsync(entity); 
+                    }
                 }
             }
             catch (Exception ex)

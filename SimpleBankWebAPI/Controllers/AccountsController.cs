@@ -86,7 +86,7 @@ namespace SimpleBankWebAPI.Controllers
                 try
                 {
                     var entity = new Account();
-                    entity.AccountName = model.AccountName.Trim();
+                    entity.AccountName = model.AccountName?.Trim() == null ? "" : model.AccountName.Trim();
                     entity.AccountType = model.AccountType;
                     entity.SavingsBalance = Convert.ToDecimal(model.SavingsBalance);
                     entity.AccountType = model.AccountType;
@@ -102,7 +102,7 @@ namespace SimpleBankWebAPI.Controllers
                         {
                             entity.AccountId = model.AccountId;
                             entity.AccountNumber = model.AccountId.ToString();
-                            url += "/AccountsApi/PutAccount/" + model.AccountName.ToString();
+                            url += "/AccountsApi/PutAccount/" + model.AccountName?.ToString();
                             var myContent = JsonConvert.SerializeObject(entity);
                             var buffer = System.Text.Encoding.UTF8.GetBytes(myContent);
                             var byteContent = new ByteArrayContent(buffer);

@@ -10,7 +10,6 @@ namespace DataAccessLayer.Contracts
         Task<ICollection<PostedTransaction>> GetAllAsync();
         PostedTransaction GetById(int Id);
         Task<PostedTransaction> GetByIdAsync(int? Id);
-        void AddTransaction(PostedTransaction entity);
         Task AddTransactionAsync(PostedTransaction entity);
     
      

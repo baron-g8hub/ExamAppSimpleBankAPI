@@ -4,19 +4,28 @@
     ViewData["Title"] = "Accounts";
 }
 
-@*
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" id="mytoastr111">
+
+@*<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" id="mytoastrXXXXX">
+
     <div class="toast-body alert-info">
     Model.myToaster.Message
     </div>
     </div>*@
 
-
-@*<div aria-live="polite" aria-atomic="true" class="position-fixed d-flex justify-content-center align-items-center w-100">
+<div class="position-fixed toast align-items-center text-white bg-primary bg-gradient border-0" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 11;" id="taost2">
+    <div class="d-flex">
+        <div class="toast-body">
+            Funds Transfer Successful!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+@*
+    <div aria-live="polite" aria-atomic="true" class="position-fixed d-flex justify-content-center align-items-center w-100">
     <!-- Then put toasts within -->
-    <div id="mytoastr"  class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="mytoastr" class="toast text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="toast-header">
-    <img src="" class="rounded me-2" alt="">
+    <img class="rounded me-2" alt="">
     <strong class="me-auto">Account</strong>
     <small>11 mins ago</small>
     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -27,13 +36,16 @@
     </div>
     </div>*@
 
+
 @section Scripts {
 
 <script type="text/javascript">
-    //$(document).ready(function () {
-    //    $('#mytoastr').toast({ delay: 2000 });
-    //    $('#mytoastr').toast('show');
-    //});
+    $(document).ready(function () {
+        //$('#mytoastr').toast({ delay: 4000 });
+        //$('#mytoastr').toast('show');
+        $('#taost2').toast({ delay: 4000 });
+        $('#taost2').toast('show');
+    });
 </script>
 
 }
