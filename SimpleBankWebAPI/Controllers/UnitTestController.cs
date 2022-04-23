@@ -1,62 +1,28 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer.Contracts;
+using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using DataAccessLayer.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 namespace SimpleBankWebAPI.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class TransactionsAPIController : ControllerBase
+    public class UnitTestController : ControllerBase
     {
+
         public IConfiguration _configuration;
         private IRepositoryWrapper _repository;
 
         // Define the cancellation token.
         CancellationTokenSource? _cts;
-        public TransactionsAPIController(IConfiguration configuration, IRepositoryWrapper repository)
+        public UnitTestController(IConfiguration configuration, IRepositoryWrapper repository)
         {
             _configuration = configuration;
             _repository = repository;
             //_service = new TransactionService(context, repository);
         }
 
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostedTransaction>>> Get()
-        {
-            var list = await _repository.PostedTransactions.GetAllAsync();
-            var orderedList = list.OrderByDescending(x => x.PostingDate).ToList();
-            return Ok(orderedList);
-        }
-
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostedTransaction>> Get(int? id)
-        {
-            try
-            {
-                if (id == 0)
-                {
-                    return NotFound();
-                }
-                var entity = await _repository.PostedTransactions.GetByIdAsync(id);
-                if (IsExists(entity.TransactionId))
-                {
-                    return Ok(entity);
-                }
-                else
-                {
-                    return NotFound();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return this.StatusCode(400, ex.Message);
-            }
-        }
 
         [HttpPost]
         public async Task<IActionResult> PostTransaction([FromBody] PostedTransaction transaction)
@@ -173,12 +139,5 @@ namespace SimpleBankWebAPI.Controllers
             }
             return NoContent();
         }
-
-        private bool IsExists(int id)
-        {
-            return _repository.PostedTransactions.GetAll().Any(e => e.TransactionId == id);
-        }
-
-
     }
 }

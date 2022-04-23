@@ -17,18 +17,18 @@
                     Posting Date
                 </th>
                 <th>
-                    Account #.
-                </th>
-                <th style="text-align: center;">
-                    Amount
+                    Source #.
                 </th>
                 <th>
                     Recipient #.
                 </th>
-                <th>
+                <th style="text-align: right;">
+                    Amount
+                </th>
+                <th style="text-align: right;">
                     Description
                 </th>
-                <th style="text-align: center;">
+                <th style="text-align: right;">
                     Running Balance
                 </th>
                 <th></th>
@@ -44,16 +44,16 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.PostingDate)
                     </td>
-                    <td>
+                    <td style="font-family:sans-serif;">
                         @Html.DisplayFor(modelItem => item.AccountNumber)
+                    </td>
+                    <td style="font-family:sans-serif;">
+                        @Html.DisplayFor(modelItem => item.DestinationAccount)
                     </td>
                     <td scope="row" style="text-align: right; font-family:monospace;">
                         @Utility.HandleAmountFormat(item.Amount.ToString())
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DestinationAccount)
-                    </td>
-                    <td style="font-size: small;">
+                    <td style="font-size: small; text-align: right;">
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td scope="row" style="text-align: right; font-family:monospace;">

@@ -13,6 +13,8 @@ namespace DataAccessLayer.Models
         [Column("Transaction_ID")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionId { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy | h: mm tt}")]
         [Column(TypeName = "datetime")]
         public DateTime? PostingDate { get; set; }
         [StringLength(50)]

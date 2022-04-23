@@ -12,5 +12,7 @@ namespace DataAccessLayer.Contracts
         Task SaveAsync();
         Task<int> SaveAsync(CancellationToken ct);
         Task<int> SaveTransactionAsync(CancellationToken ct);
+        Task<bool> UnitTestSaveChangesPostTransactionConcurrency(PostedTransaction postedTransaction);
+        
     }
 }

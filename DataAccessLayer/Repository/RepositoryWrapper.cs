@@ -52,7 +52,7 @@ namespace DataAccessLayer.Repository
         public async Task<int> SaveAsync(CancellationToken ct)
         {
             int records = 0;
-            IDbContextTransaction? tx = null;
+            IDbContextTransaction? transaction = null;
             //await Task.Delay(5000);
             if (ct.IsCancellationRequested)
             {
@@ -60,10 +60,10 @@ namespace DataAccessLayer.Repository
             }
             try
             {
-                using (tx = await _repoContext.Database.BeginTransactionAsync())
+                using (transaction = await _repoContext.Database.BeginTransactionAsync())
                 {
                     records = await _repoContext.SaveChangesAsync();
-                    await tx.CommitAsync();
+                    await transaction.CommitAsync();
                     return records;
                 }
             }
@@ -80,11 +80,14 @@ namespace DataAccessLayer.Repository
                         foreach (var property in proposedValues.Properties)
                         {
                             var proposedValue = proposedValues[property];
-                            var databaseValue = databaseValues[property];
+                            var databaseValue = databaseValues?[property];
                         }
 
                         // Refresh original values to bypass next concurrency check
-                        entry.OriginalValues.SetValues(databaseValues);
+                        if (databaseValues != null)
+                        {
+                            entry.OriginalValues.SetValues(databaseValues);
+                        }
                     }
                     else
                     {
@@ -97,18 +100,19 @@ namespace DataAccessLayer.Repository
             {
                 SqlException? s = ex.InnerException as SqlException;
                 var errorMessage = $"{ex.Message}" + " {ex?.InnerException.Message}" + " rolling back…";
-                tx.Rollback();
-                throw s;
+                transaction?.Rollback();
+                //  throw s;
             }
-            //  return records;
+            return records;
         }
 
 
 
         public async Task<int> SaveTransactionAsync(CancellationToken ct)
         {
+
             int records = 0;
-            IDbContextTransaction? tx = null;
+            IDbContextTransaction? transaction = null;
             //await Task.Delay(5000);
             if (ct.IsCancellationRequested)
             {
@@ -116,10 +120,10 @@ namespace DataAccessLayer.Repository
             }
             try
             {
-                using (tx = await _repoContext.Database.BeginTransactionAsync())
+                using (transaction = await _repoContext.Database.BeginTransactionAsync())
                 {
                     records = await _repoContext.SaveChangesAsync();
-                    await tx.CommitAsync();
+                    await transaction.CommitAsync();
                     return records;
                 }
             }
@@ -135,11 +139,14 @@ namespace DataAccessLayer.Repository
                         foreach (var property in proposedValues.Properties)
                         {
                             var proposedValue = proposedValues[property];
-                            var databaseValue = databaseValues[property];
+                            var databaseValue = databaseValues?[property];
                         }
 
                         // Refresh original values to bypass next concurrency check
-                        entry.OriginalValues.SetValues(databaseValues);
+                        if (databaseValues != null)
+                        {
+                            entry.OriginalValues.SetValues(databaseValues);
+                        }
                     }
                     else
                     {
@@ -152,29 +159,39 @@ namespace DataAccessLayer.Repository
             {
                 SqlException? s = ex.InnerException as SqlException;
                 var errorMessage = $"{ex.Message}" + " {ex?.InnerException.Message}" + " rolling back…";
-                tx.Rollback();
-                throw s;
+                transaction?.Rollback();
+                //throw s;
             }
-            //  return records;
+            return records;
         }
 
 
-        public bool SaveChangesOptimisticConcurrency(EntityEntry entity)
+        public async Task<bool> UnitTestSaveChangesPostTransactionConcurrency(PostedTransaction postedTransaction)
         {
+            var entity = _repoContext.Accounts?.Single(s => s.AccountNumber == postedTransaction.AccountNumber);
+            if (entity != null)
+            {
+                entity.SavingsBalance = 300;
+                postedTransaction.Description = "UnitTestSaveChangesPostTransactionConcurrency set Available Balance = 300";
+            }
+
+            // Change the person's name in the database to simulate a concurrency conflict
+            _repoContext.Database.ExecuteSqlRaw("UPDATE dbo.Accounts SET SavingsBalance = 5 WHERE AccountName = 'UnitTestAccount'");
+
             var saved = false;
             while (!saved)
             {
                 try
                 {
                     // Attempt to save changes to the database
-                    _repoContext.SaveChanges();
+                    await _repoContext.SaveChangesAsync();
                     saved = true;
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
                     foreach (EntityEntry entry in ex.Entries)
                     {
-                        if (entry.Entity is nameof(entity))
+                        if (entry.Entity is Account)
                         {
                             var proposedValues = entry.CurrentValues;
                             var databaseValues = entry.GetDatabaseValues();
@@ -182,14 +199,13 @@ namespace DataAccessLayer.Repository
                             foreach (var property in proposedValues.Properties)
                             {
                                 var proposedValue = proposedValues[property];
-                                var databaseValue = databaseValues[property];
-
-                                // Refresh original values to bypass next concurrency check
+                                var databaseValue = databaseValues?[property];
+                            }
+                            // Refresh original values to bypass next concurrency check
+                            if (databaseValues != null)
+                            {
                                 entry.OriginalValues.SetValues(databaseValues);
                             }
-
-                            // Refresh original values to bypass next concurrency check
-                            entry.OriginalValues.SetValues(databaseValues);
                         }
                         else
                         {
@@ -200,6 +216,8 @@ namespace DataAccessLayer.Repository
             }
             return saved;
         }
+
+
 
 
 
@@ -244,6 +262,7 @@ namespace DataAccessLayer.Repository
             //    ModelState.Remove("RowVersion");
             //}
         }
+
 
     }
 }
