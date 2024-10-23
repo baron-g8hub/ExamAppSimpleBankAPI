@@ -39,8 +39,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
 
-//builder.Services.AddTransient<IAccountsServiceRepository, AccountsServiceRepository>();
-//builder.Services.AddTransient<IPostedTransactionsRepository, PostedTransactionsRepository>();
+builder.Services.AddTransient<IAccountsServiceRepository, AccountsServiceRepository>();
+builder.Services.AddTransient<IPostedTransactionsRepository, PostedTransactionsRepository>();
 
 
 

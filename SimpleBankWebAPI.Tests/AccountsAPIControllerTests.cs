@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleBankWebAPI.Controllers;
-using SimpleBankWebAPI.DataContext;
-using SimpleBankWebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

@@ -16,6 +16,8 @@ namespace DataAccessLayer.DataContextEFCore
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Account>().Property(p => p.RowVersion).IsRowVersion();
             modelBuilder.Entity<PostedTransaction>().Property(p => p.RowVersion).IsRowVersion();
         }

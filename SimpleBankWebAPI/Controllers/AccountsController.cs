@@ -62,7 +62,7 @@ namespace SimpleBankWebAPI.Controllers
                     }
                     using (var response = await httpClient.GetAsync(url + "/AccountsApi/GetAccount/" + id.ToString()))
                     {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        var apiResponse = await response.Content.ReadAsStringAsync();
                         entity = JsonConvert.DeserializeObject<Account>(apiResponse);
                         vm.AccountId = entity.AccountId;
                         vm.AccountName = entity.AccountName;
